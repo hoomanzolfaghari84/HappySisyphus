@@ -1,0 +1,3 @@
+[submodule "Sisyphus/vendor/spdlog"]
+	path = Sisyphus/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
