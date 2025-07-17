@@ -3,7 +3,7 @@
 bin-int/
 Intermediates/
 
-# Hazel files
+# Sisyphus files
 *.log
 
 # Visual Studio files and folder
@@ -16,5 +16,5 @@ Intermediates/
 
 # Directories
 Sisyphus/vendor/VulkanSDK
-Hazelnut/assets/cache
+Boulder/assets/cache
 scripts/__pycache__
