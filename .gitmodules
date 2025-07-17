@@ -7,3 +7,4 @@
 [submodule "Sisyphus/vendor/imgui"]
 	path = Sisyphus/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
+	branch = docking
