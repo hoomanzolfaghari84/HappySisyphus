@@ -1,13 +1,23 @@
 workspace "HappySisyphus"
     architecture "x64"
-    startproject "Sisyphus"
+    startproject "Sandbox"
 
     configurations { "Debug", "Release", "Dist" }
 
 -- Output directory format
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- CoreLib project (Shared Library)
+IncludeDir = {}
+IncludeDir["GLFW"] = "Sisyphus/vendor/GLFW/include"
+IncludeDir["Glad"] = "Sisyphus/vendor/Glad/include"
+
+
+include "Sisyphus/vendor/GLFW"
+include "Sisyphus/vendor/Glad"
+
+-- 
+-- Sisyphus Library Project (Shared Library)
+-- 
 project "Sisyphus"
     location "Sisyphus"
     kind "SharedLib"
@@ -18,33 +28,47 @@ project "Sisyphus"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+    pchheader "hspch.h"
+    pchsource "Sisyphus/src/hspch.cpp"
+
     files { "%{prj.name}/src/**.h", "%{prj.name}/src/**.hpp", "%{prj.name}/src/**.cpp" }
 
-    includedirs { "%{prj.name}/vendor/spdlog/include" }
+    includedirs { "%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}" }
+
+    links {"GLFW", "Glad", "opengl32.lib"}
 
     filter "system:windows"
         systemversion "latest"
-        cppdialect "C++17"
+        cppdialect "C++20"
         staticruntime "on"
-        defines { "SP_PLATFORM_WINDOWS", "SP_BUILD_DLL", "_WINDLL" }
+        defines { "SP_PLATFORM_WINDOWS", "SP_BUILD_DLL", "_WINDLL", "GLFW_INCLUDE_NONE" }
         postbuildcommands { ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox") }
+        buildoptions { "/utf-8" }
 
     filter "configurations:Debug"
         defines { "DEBUG", "SP_DEBUG" }
+        -- runtime "Debug"
         symbols "On"
+        buildoptions {"/MDd"}
 
     filter "configurations:Release"
         defines { "NDEBUG", "SP_RELEASE" }
+        --runtime "Release"
         optimize "On"
+        buildoptions {"/MD"}
 
     filter "configurations:Dist"
-        defines { "NDEBUG", "SP_Dist" }
+        defines { "NDEBUG", "SP_DIST" }
+        --runtime "Release"
         optimize "On"
+        buildoptions {"/MD"}
 
     -- filter { "system:windows", "configurations:Release" }
     --     buildoptions "/MT"
 
--- App project (Console Application)
+-- 
+-- Sandbox Application Project
+-- 
 project "Sandbox"
     location "Sandbox"
     kind "ConsoleApp"
@@ -59,7 +83,7 @@ project "Sandbox"
 
 
     includedirs {
-        "%{prj.name}/vendor/spdlog/include",
+        "Sisyphus/vendor/spdlog/include",
         "Sisyphus/src"
     }
 
@@ -69,21 +93,25 @@ project "Sandbox"
 
     filter "system:windows"
         systemversion "latest"
-        cppdialect "C++23"
+        cppdialect "C++20"
         staticruntime "on"
         defines { "SP_PLATFORM_WINDOWS", "_WINDLL" }
+        buildoptions { "/utf-8" }
 
     filter "configurations:Debug"
         defines { "DEBUG", "SP_DEBUG" }
         symbols "On"
+        buildoptions {"/MDd"}
 
     filter "configurations:Release"
         defines { "NDEBUG", "SP_RELEASE" }
         optimize "On"
+        buildoptions {"/MD"}
 
     filter "configurations:Dist"
-        defines { "NDEBUG", "SP_Dist" }
+        defines { "NDEBUG", "SP_DIST" }
         optimize "On"
+        buildoptions {"/MD"}
 
     
     
