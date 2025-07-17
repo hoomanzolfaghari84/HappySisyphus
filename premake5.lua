@@ -10,10 +10,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Sisyphus/vendor/GLFW/include"
 IncludeDir["Glad"] = "Sisyphus/vendor/Glad/include"
+IncludeDir["ImGui"] = "Sisyphus/vendor/imgui"
 
 
 include "Sisyphus/vendor/GLFW"
 include "Sisyphus/vendor/Glad"
+include "Sisyphus/vendor/imgui"
 
 -- 
 -- Sisyphus Library Project (Shared Library)
@@ -33,9 +35,9 @@ project "Sisyphus"
 
     files { "%{prj.name}/src/**.h", "%{prj.name}/src/**.hpp", "%{prj.name}/src/**.cpp" }
 
-    includedirs { "%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}" }
+    includedirs { "%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}"  }
 
-    links {"GLFW", "Glad", "opengl32.lib"}
+    links {"GLFW", "Glad", "ImGui", "opengl32.lib"}
 
     filter "system:windows"
         systemversion "latest"
