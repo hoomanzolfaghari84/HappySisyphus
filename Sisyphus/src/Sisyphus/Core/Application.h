@@ -6,10 +6,10 @@
 #include "Sisyphus/Core/LayerStack.h"
 #include "Sisyphus/Events/Event.h"
 #include "Sisyphus/Events/ApplicationEvent.h"
-//
+
 #include "Sisyphus/Core/Timestep.h"
-//
-//#include "Sisyphus/ImGui/ImGuiLayer.h"
+
+#include "Sisyphus/ImGui/ImGuiLayer.h"
 
 int main(int argc, char** argv);
 
@@ -49,7 +49,7 @@ namespace Sisyphus {
 
 		void Close();
 
-		//ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		static Application& Get() { return *s_Instance; }
 
@@ -65,7 +65,7 @@ namespace Sisyphus {
 	private:
 		ApplicationSpecification m_Specification;
 		std::unique_ptr<Window> m_Window;
-		/*ImGuiLayer* m_ImGuiLayer;*/
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;
 		LayerStack m_LayerStack;

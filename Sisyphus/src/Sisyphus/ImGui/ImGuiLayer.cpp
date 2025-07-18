@@ -1,6 +1,7 @@
 #include "hspch.h"
 #include "ImGuiLayer.h"
 
+
 #include <imgui.h>
 #include <imgui_internal.h>
 
@@ -32,14 +33,14 @@ namespace Sisyphus {
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
 		float fontSize = 18.0f;// *2.0f;
-		io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/static/OpenSans-Bold.ttf", fontSize);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/static/OpenSans-Regular.ttf", fontSize);
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
@@ -47,11 +48,11 @@ namespace Sisyphus {
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle& style = ImGui::GetStyle();
-		/*if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}*/
+		}
 
 		SetDarkThemeColors();
 
@@ -74,6 +75,7 @@ namespace Sisyphus {
 
 	void ImGuiLayer::OnEvent(Event& e)
 	{
+		//SIPH_CORE_INFO("{}",e.ToString());
 		if (m_BlockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
@@ -86,15 +88,21 @@ namespace Sisyphus {
 	{
 		//HZ_PROFILE_FUNCTION();
 
+		//glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Dark grey
+		
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		//ImGuizmo::BeginFrame();
+		
 	}
 
 	void ImGuiLayer::End()
 	{
 		//HZ_PROFILE_FUNCTION();
+		static bool show = true;
+		ImGui::ShowDemoWindow(&show);
 
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();

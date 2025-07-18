@@ -180,6 +180,8 @@ namespace Sisyphus {
 		//HZ_PROFILE_FUNCTION();
 
 		glfwPollEvents();
+		glfwSwapBuffers(m_Window);
+		glClear(GL_COLOR_BUFFER_BIT);
 		//m_Context->SwapBuffers();
 	}
 
