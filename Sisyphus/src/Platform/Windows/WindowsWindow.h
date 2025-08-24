@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Sisyphus/Core/Window.h"
-//#include "Sisyphus/Renderer/GraphicsContext.h"
+#include "Sisyphus/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -29,7 +29,7 @@ namespace Sisyphus {
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
-		//Scope<GraphicsContext> m_Context;
+		std::shared_ptr<GraphicsContext> m_Context;
 
 		struct WindowData
 		{

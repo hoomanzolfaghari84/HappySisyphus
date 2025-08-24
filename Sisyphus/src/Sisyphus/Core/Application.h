@@ -22,7 +22,7 @@ namespace Sisyphus {
 
 		const char* operator[](int index) const
 		{
-			SP_CORE_ASSERT(index < Count);
+			SP_CORE_ASSERT(index < Count, "Index out of range for Application Commandline Args");
 			return Args[index];
 		}
 	};

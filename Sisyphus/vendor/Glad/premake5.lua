@@ -26,5 +26,6 @@ project "Glad"
 		runtime "Debug"
 		symbols "on"
 
-	filter { "system:windows", "configurations:Release" }	
-		buildoptions {"/MT"}
+	filter { "configurations:Release" }	
+		runtime "Release"
+		optimize "on"

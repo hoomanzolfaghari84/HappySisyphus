@@ -9,8 +9,7 @@
 
 //#include "Sisyphus/Renderer/Renderer.h"
 
-//#include "Platform/OpenGL/OpenGLContext.h"
-#include <glad/glad.h>
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Sisyphus {
 
@@ -63,11 +62,9 @@ namespace Sisyphus {
 			++s_GLFWWindowCount;
 		}
 
-		//m_Context = GraphicsContext::Create(m_Window);
-		//m_Context->Init();
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		SP_CORE_ASSERT(status, "Faild to initialize Glad!")
+		m_Context = GraphicsContext::Create(m_Window);
+		m_Context->Init();
+		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
@@ -160,6 +157,7 @@ namespace Sisyphus {
 				MouseMovedEvent event((float)xPos, (float)yPos);
 				data.EventCallback(event);
 			});
+		//
 	}
 
 	void WindowsWindow::Shutdown()
@@ -180,9 +178,7 @@ namespace Sisyphus {
 		//HZ_PROFILE_FUNCTION();
 
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
-		glClear(GL_COLOR_BUFFER_BIT);
-		//m_Context->SwapBuffers();
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
