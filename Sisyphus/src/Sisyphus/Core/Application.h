@@ -14,6 +14,7 @@
 #include "Sisyphus/Renderer/Shader.h"
 #include <Sisyphus/Renderer/Buffer.h>
 #include <Sisyphus/Renderer/VertexArray.h>
+#include "Sisyphus/Renderer/OrthographicCamera.h"
 
 int main(int argc, char** argv);
 
@@ -75,15 +76,6 @@ namespace Sisyphus {
 		LayerStack m_LayerStack;
 		float m_LastFrameTime = 0.0f;
 
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
-		std::shared_ptr<VertexBuffer> m_VertexBuffer;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
-
-
-		std::shared_ptr<VertexArray> m_SquareVA;
-		/*std::shared_ptr<VertexBuffer> m_VertexBuffer;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;*/
 
 		/*std::vector<std::function<void()>> m_MainThreadQueue;
 		std::mutex m_MainThreadQueueMutex;*/

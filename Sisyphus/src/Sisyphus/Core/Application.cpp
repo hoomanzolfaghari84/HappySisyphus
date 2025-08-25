@@ -15,8 +15,14 @@ namespace Sisyphus {
 	Application::Application(const ApplicationSpecification& specification)
 		: m_Specification(specification)
 	{
-
 		/*HZ_PROFILE_FUNCTION();*/
+
+		/*LogVec3(m_Camera.GetPosition(), "Camera Position");
+		std::cout << "Camera Rotation: " << m_Camera.GetRotation() << "\n";
+
+		LogMat4(m_Camera.GetProjectionMatrix(), "Projection Matrix");
+		LogMat4(m_Camera.GetViewMatrix(), "View Matrix");
+		LogMat4(m_Camera.GetViewProjectionMatrix(), "ViewProjection Matrix");*/
 
 		SP_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -30,87 +36,12 @@ namespace Sisyphus {
 		m_Window = Window::Create(WindowProps(m_Specification.Name));
 		m_Window->SetEventCallback(SP_BIND_EVENT_FN(Application::OnEvent));
 
-		//Renderer::Init();
+		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
 		SIPH_CORE_TRACE("Engine App Initialized");
-
-		m_VertexArray = VertexArray::Create();
-
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.f,
-			0.5f, -0.5f, 0.0f,  0.2f, 0.3f, 0.8f, 1.f,
-			0.0f, 0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.f
-		};
-
-		m_VertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
-
-		
-		BufferLayout layout = {
-			{ ShaderDataType::Float3, "a_Position"},
-			{ ShaderDataType::Float4, "a_Color"}
-		};
-
-		m_VertexBuffer->SetLayout(layout);
-
-	
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-
-
-		unsigned int indices[3] = { 0,1,2 };
-		m_IndexBuffer = IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t) );
-
-		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
-
-
-
-		/*m_SquareVA = VertexArray::Create();
-
-
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f, 
-			0.0f, 0.5f, 0.0f
-		};
-
-		std::shared_ptr<VertexBuffer> squareVB = VertexBuffer::Create();*/
-
-		std::string vertexSrc = R"(
-			#version 450 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-
-			out vec3 v_Position;
-			out vec4 v_Color;
-
-			void main(){
-				v_Position = a_Position;
-				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0);
-			}
-		
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 450 core
-			
-			layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			in vec4 v_Color;
-
-			void main(){
-				color = vec4((v_Position + 1)*0.5, 1.0);
-				color = v_Color;
-			}
-		
-		)";
-
-		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
-
 
 	}
 
@@ -142,15 +73,6 @@ namespace Sisyphus {
 		{
 			//HZ_PROFILE_SCOPE("RunLoop");
 
-			RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
-			RenderCommand::Clear();
-
-			Renderer::BeginScene();
-
-			Renderer::Submit(m_Shader, m_VertexArray);
-
-			Renderer::EndScene();
-			
 			float time = Time::GetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
