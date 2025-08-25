@@ -2,10 +2,9 @@
 
 #include <filesystem>
 #include "Application.h"
-//#include "Sisyphus/Renderer/Renderer.h"
+#include "Sisyphus/Renderer/Renderer.h"
 
 #include "Sisyphus/Utils/PlatformUtils.h"
-#include <glad/glad.h>
 
 #include "Sisyphus/Renderer/Shader.h"
 
@@ -143,10 +142,15 @@ namespace Sisyphus {
 		{
 			//HZ_PROFILE_SCOPE("RunLoop");
 
-			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
+			RenderCommand::Clear();
 
+			Renderer::BeginScene();
+
+			Renderer::Submit(m_Shader, m_VertexArray);
+
+			Renderer::EndScene();
+			
 			float time = Time::GetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
