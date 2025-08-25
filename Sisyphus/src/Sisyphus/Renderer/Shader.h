@@ -10,6 +10,16 @@ namespace Sisyphus {
 	class Shader
 	{
 	public:
+		Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		~Shader();
+
+		void Bind() const;
+		void Unbind() const;
+
+	private:
+		uint32_t m_RendererID;
+
+	/*public:
 		virtual ~Shader() = default;
 
 		virtual void Bind() const = 0;
@@ -41,7 +51,7 @@ namespace Sisyphus {
 
 		bool Exists(const std::string& name) const;
 	private:
-		std::unordered_map<std::string, std::shared_ptr<Shader>> m_Shaders;
+		std::unordered_map<std::string, std::shared_ptr<Shader>> m_Shaders;*/
 	};
 
 }

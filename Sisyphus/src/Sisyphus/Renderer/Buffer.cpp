@@ -11,6 +11,7 @@ namespace Sisyphus {
 
 	std::shared_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
+		//return std::make_shared<OpenGLVertexBuffer>(size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
@@ -23,6 +24,7 @@ namespace Sisyphus {
 
 	std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
+		//return std::make_shared<OpenGLVertexBuffer>(vertices, size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
@@ -35,6 +37,7 @@ namespace Sisyphus {
 
 	std::shared_ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{
+		//return std::make_shared<OpenGLIndexBuffer>(indices, size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;

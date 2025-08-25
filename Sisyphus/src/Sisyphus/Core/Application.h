@@ -11,6 +11,10 @@
 
 #include "Sisyphus/ImGui/ImGuiLayer.h"
 
+#include "Sisyphus/Renderer/Shader.h"
+#include <Sisyphus/Renderer/Buffer.h>
+#include <Sisyphus/Renderer/VertexArray.h>
+
 int main(int argc, char** argv);
 
 namespace Sisyphus {
@@ -70,6 +74,16 @@ namespace Sisyphus {
 		bool m_Minimized = false;
 		LayerStack m_LayerStack;
 		float m_LastFrameTime = 0.0f;
+
+		std::unique_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+
+
+		std::shared_ptr<VertexArray> m_SquareVA;
+		/*std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;*/
 
 		/*std::vector<std::function<void()>> m_MainThreadQueue;
 		std::mutex m_MainThreadQueueMutex;*/

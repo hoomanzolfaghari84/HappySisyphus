@@ -9,13 +9,13 @@ namespace Sisyphus {
 
 	std::unique_ptr<RendererAPI> RendererAPI::Create()
 	{
-		switch (s_API)
+		/*switch (s_API)
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return std::make_unique<OpenGLRendererAPI>();
 		}
 
-		SP_CORE_ASSERT(false, "Unknown RendererAPI!");
+		SP_CORE_ASSERT(false, "Unknown RendererAPI!");*/
 		return nullptr;
 	}
 
