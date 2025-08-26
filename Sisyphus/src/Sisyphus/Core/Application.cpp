@@ -147,7 +147,7 @@ namespace Sisyphus {
 		}
 
 		m_Minimized = false;
-		//Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 
 		return false;
 	}
@@ -161,9 +161,6 @@ namespace Sisyphus {
 
 		m_MainThreadQueue.clear();
 	}*/
-
-
-	
 
 }
 

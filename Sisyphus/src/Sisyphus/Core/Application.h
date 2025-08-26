@@ -11,11 +11,6 @@
 
 #include "Sisyphus/ImGui/ImGuiLayer.h"
 
-#include "Sisyphus/Renderer/Shader.h"
-#include <Sisyphus/Renderer/Buffer.h>
-#include <Sisyphus/Renderer/VertexArray.h>
-#include "Sisyphus/Renderer/OrthographicCamera.h"
-
 int main(int argc, char** argv);
 
 namespace Sisyphus {

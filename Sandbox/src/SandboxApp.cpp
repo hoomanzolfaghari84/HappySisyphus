@@ -1,10 +1,11 @@
 #include <iostream>
 #include <Sisyphus.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 class ExampleLayer : public Sisyphus::Layer {
 
 public:
-	ExampleLayer() : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.f) {
+	ExampleLayer() : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.f), m_TrianglePosition(0.f) {
 
 		m_VertexArray = Sisyphus::VertexArray::Create();
 
@@ -53,6 +54,7 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -60,7 +62,7 @@ public:
 			void main(){
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		
 		)";
@@ -80,7 +82,7 @@ public:
 		
 		)";
 
-		m_Shader.reset(new Sisyphus::Shader(vertexSrc, fragmentSrc));
+		m_Shader = Sisyphus::Shader::Create("Traingle Shader", vertexSrc, fragmentSrc);
 
 	}
 
@@ -103,6 +105,8 @@ public:
 			m_CameraPosition.y += m_CameraMoveSpeed * ts;
 		}
 
+
+
 		if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::Q)) {
 			m_CameraRotation += m_CameraRotationSpeed * ts;
 		}
@@ -112,6 +116,22 @@ public:
 
 		}
 
+
+		if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::A)) {
+			m_TrianglePosition.x -= m_TriangleMoveSpeed * ts;
+		}
+
+		else if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::D)) {
+			m_TrianglePosition.x += m_TriangleMoveSpeed * ts;
+		}
+
+		if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::S)) {
+			m_TrianglePosition.y -= m_TriangleMoveSpeed * ts;
+		}
+
+		else if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::W)) {
+			m_TrianglePosition.y += m_TriangleMoveSpeed * ts;
+		}
 		
 
 		Sisyphus::RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
@@ -120,9 +140,11 @@ public:
 		m_Camera.SetPosition(m_CameraPosition);
 		m_Camera.SetRotation(m_CameraRotation);
 
+		glm::mat4 transform = glm::translate(glm::mat4(1.f), m_TrianglePosition);
+
 		Sisyphus::Renderer::BeginScene(m_Camera);
 
-		Sisyphus::Renderer::Submit(m_Shader, m_VertexArray);
+		Sisyphus::Renderer::Submit(m_Shader, m_VertexArray, transform);
 
 		Sisyphus::Renderer::EndScene();
 
@@ -151,6 +173,9 @@ private:
 	float m_CameraMoveSpeed = 1.f;
 	float m_CameraRotationSpeed = 10.f;
 	float m_CameraRotation = 0.f;
+
+	glm::vec3 m_TrianglePosition;
+	float m_TriangleMoveSpeed = 1.5f;
 };
 
 
