@@ -1,6 +1,10 @@
 #include <iostream>
 #include <Sisyphus.h>
+
+#include "imgui/imgui.h"
+
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public Sisyphus::Layer {
 
@@ -10,45 +14,51 @@ public:
 		m_VertexArray = Sisyphus::VertexArray::Create();
 
 		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.f,
-			0.5f, -0.5f, 0.0f,  0.2f, 0.3f, 0.8f, 1.f,
-			0.0f, 0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.f
+			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		m_VertexBuffer = Sisyphus::VertexBuffer::Create(vertices, sizeof(vertices));
-
+		std::shared_ptr<Sisyphus::VertexBuffer> vertexBuffer = Sisyphus::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		Sisyphus::BufferLayout layout = {
 			{Sisyphus::ShaderDataType::Float3, "a_Position"},
-			{ Sisyphus::ShaderDataType::Float4, "a_Color"}
+			{Sisyphus::ShaderDataType::Float4, "a_Color"}
 		};
-
-		m_VertexBuffer->SetLayout(layout);
-
-
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 
 		unsigned int indices[3] = { 0,1,2 };
-		m_IndexBuffer = Sisyphus::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-
-		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
-
+		std::shared_ptr<Sisyphus::IndexBuffer> indexBuffer = Sisyphus::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 
-		/*m_SquareVA = VertexArray::Create();
+
+		m_SquareVA = Sisyphus::VertexArray::Create();
 
 
-		float vertices[3 * 7] = {
+		float squareVertices[3 * 4] = {
 			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 
-		std::shared_ptr<VertexBuffer> squareVB = VertexBuffer::Create();*/
+		std::shared_ptr<Sisyphus::VertexBuffer> squareVB = Sisyphus::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		squareVB->SetLayout({
+			{ Sisyphus::ShaderDataType::Float3, "a_Position" }
+			});
+		m_SquareVA->AddVertexBuffer(squareVB);
+
+		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<Sisyphus::IndexBuffer> squareIB;
+		squareIB = Sisyphus::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+		m_SquareVA->SetIndexBuffer(squareIB);
+
 
 		std::string vertexSrc = R"(
-			#version 450 core
+			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
@@ -59,30 +69,65 @@ public:
 			out vec3 v_Position;
 			out vec4 v_Color;
 
-			void main(){
+			void main()
+			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
-		
 		)";
 
 		std::string fragmentSrc = R"(
-			#version 450 core
+			#version 330 core
 			
 			layout(location = 0) out vec4 color;
-			
+
 			in vec3 v_Position;
 			in vec4 v_Color;
 
-			void main(){
-				color = vec4((v_Position + 1)*0.5, 1.0);
+			void main()
+			{
+				color = vec4(v_Position * 0.5 + 0.5, 1.0);
 				color = v_Color;
 			}
-		
 		)";
 
 		m_Shader = Sisyphus::Shader::Create("Traingle Shader", vertexSrc, fragmentSrc);
+
+
+		std::string flatColorShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string flatColorShaderFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_Position;
+			
+			uniform vec3 u_Color;
+
+			void main()
+			{
+				color = vec4(u_Color, 1.0);
+			}
+		)";
+
+		m_FlatColorShader = Sisyphus::Shader::Create("Squares Shader", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
 	}
 
@@ -140,9 +185,27 @@ public:
 		m_Camera.SetPosition(m_CameraPosition);
 		m_Camera.SetRotation(m_CameraRotation);
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.f), m_TrianglePosition);
 
 		Sisyphus::Renderer::BeginScene(m_Camera);
+
+
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		m_FlatColorShader->Bind();
+		m_FlatColorShader->SetFloat3("u_Color", m_SquareColor);
+
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++)
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				Sisyphus::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+			}
+		}
+
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.f), m_TrianglePosition);
 
 		Sisyphus::Renderer::Submit(m_Shader, m_VertexArray, transform);
 
@@ -151,7 +214,11 @@ public:
 	}
 
 	void OnImGuiRender() override {
+		ImGui::Begin("Settings");
 
+		ImGui::ColorEdit3("Squares Color", glm::value_ptr(m_SquareColor));
+
+		ImGui::End();
 	}
 
 	void OnEvent(Sisyphus::Event& event) override {
@@ -163,16 +230,19 @@ public:
 private:
 	std::shared_ptr<Sisyphus::Shader> m_Shader;
 	std::shared_ptr<Sisyphus::VertexArray> m_VertexArray;
-	std::shared_ptr<Sisyphus::VertexBuffer> m_VertexBuffer;
-	std::shared_ptr<Sisyphus::IndexBuffer> m_IndexBuffer;
 
+
+	std::shared_ptr<Sisyphus::Shader> m_FlatColorShader;
 	std::shared_ptr<Sisyphus::VertexArray> m_SquareVA;
+
+	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 
 	Sisyphus::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 1.f;
-	float m_CameraRotationSpeed = 10.f;
+	float m_CameraMoveSpeed = 5.f;
+
 	float m_CameraRotation = 0.f;
+	float m_CameraRotationSpeed = 180.f;
 
 	glm::vec3 m_TrianglePosition;
 	float m_TriangleMoveSpeed = 1.5f;
