@@ -27,12 +27,12 @@ namespace Sisyphus {
 			s_RendererAPI->Clear();
 		}
 
-		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount = 0)
+		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0)
 		{
 			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
 
-		static void DrawLines(const std::shared_ptr<VertexArray>& vertexArray, uint32_t vertexCount)
+		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
 		{
 			s_RendererAPI->DrawLines(vertexArray, vertexCount);
 		}
@@ -42,7 +42,7 @@ namespace Sisyphus {
 			s_RendererAPI->SetLineWidth(width);
 		}
 	private:
-		static std::unique_ptr<RendererAPI> s_RendererAPI;
+		static Scope<RendererAPI> s_RendererAPI;
 	};
 
 }

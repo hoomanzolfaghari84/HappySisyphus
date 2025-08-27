@@ -9,39 +9,39 @@
 
 namespace Sisyphus {
 
-	std::shared_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
-		//return std::make_shared<OpenGLVertexBuffer>(size);
+		//return Ref::CreateRef<OpenGLVertexBuffer>(size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLVertexBuffer>(size);
+		case RendererAPI::API::OpenGL:  return CreateRef<OpenGLVertexBuffer>(size);
 		}
 
 		SP_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 
-	std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
+	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
-		//return std::make_shared<OpenGLVertexBuffer>(vertices, size);
+		//return Ref::CreateRef<OpenGLVertexBuffer>(vertices, size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLVertexBuffer>(vertices, size);
+		case RendererAPI::API::OpenGL:  return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		SP_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 
-	std::shared_ptr<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{
-		//return std::make_shared<OpenGLIndexBuffer>(indices, size);
+		//return Ref::CreateRef<OpenGLIndexBuffer>(indices, size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLIndexBuffer>(indices, size);
+		case RendererAPI::API::OpenGL:  return CreateRef<OpenGLIndexBuffer>(indices, size);
 		}
 
 		SP_CORE_ASSERT(false, "Unknown RendererAPI!");

@@ -113,8 +113,8 @@ namespace Sisyphus {
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
-		static std::shared_ptr<VertexBuffer> Create(uint32_t size);
-		static std::shared_ptr<VertexBuffer> Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
 	// Currently Sisyphus only supports 32-bit index buffers
@@ -128,7 +128,7 @@ namespace Sisyphus {
 
 		virtual uint32_t GetCount() const = 0;
 
-		static std::shared_ptr<IndexBuffer> Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 	};
 
 }

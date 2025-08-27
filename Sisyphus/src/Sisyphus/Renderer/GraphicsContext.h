@@ -9,7 +9,7 @@ namespace Sisyphus {
 		virtual void Init() = 0;
 		virtual void SwapBuffers() = 0;
 
-		static std::shared_ptr<GraphicsContext> Create(void* window);
+		static Ref<GraphicsContext> Create(void* window);
 	};
 }
 

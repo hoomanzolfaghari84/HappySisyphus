@@ -4,12 +4,11 @@
 
 namespace Sisyphus {
 
-	std::unique_ptr<Renderer::SceneData> Renderer::s_SceneData = std::unique_ptr<Renderer::SceneData>();
+	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
 
 	void Renderer::Init()
 	{
 		//HZ_PROFILE_FUNCTION();
-		s_SceneData = std::make_unique<SceneData>(); // not in Hazel
 		RenderCommand::Init();
 		//Renderer2D::Init();
 	}
@@ -26,13 +25,6 @@ namespace Sisyphus {
 
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
-
-		if (!s_SceneData)
-		{
-			std::cerr << "Renderer::BeginScene called before Renderer::Init!" << std::endl;
-			return;
-		}
-
 		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 
@@ -40,7 +32,7 @@ namespace Sisyphus {
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform)
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Bind();
 		shader->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);

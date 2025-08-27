@@ -1,7 +1,7 @@
 #pragma once
 
 
-
+#include "Sisyphus/Core/Base.h"
 #include "Sisyphus/Core/Application.h"
 #include "Sisyphus/Core/Layer.h"
 #include "Sisyphus/Core/Log.h"

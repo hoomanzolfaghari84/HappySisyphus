@@ -19,7 +19,7 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		std::shared_ptr<Sisyphus::VertexBuffer> vertexBuffer = Sisyphus::VertexBuffer::Create(vertices, sizeof(vertices));
+		Sisyphus::Ref<Sisyphus::VertexBuffer> vertexBuffer = Sisyphus::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		Sisyphus::BufferLayout layout = {
 			{Sisyphus::ShaderDataType::Float3, "a_Position"},
@@ -30,7 +30,7 @@ public:
 
 
 		unsigned int indices[3] = { 0,1,2 };
-		std::shared_ptr<Sisyphus::IndexBuffer> indexBuffer = Sisyphus::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+		Sisyphus::Ref<Sisyphus::IndexBuffer> indexBuffer = Sisyphus::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 
@@ -45,14 +45,14 @@ public:
 			-0.5f,  0.5f, 0.0f
 		};
 
-		std::shared_ptr<Sisyphus::VertexBuffer> squareVB = Sisyphus::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		Sisyphus::Ref<Sisyphus::VertexBuffer> squareVB = Sisyphus::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVB->SetLayout({
 			{ Sisyphus::ShaderDataType::Float3, "a_Position" }
 			});
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Sisyphus::IndexBuffer> squareIB;
+		Sisyphus::Ref<Sisyphus::IndexBuffer> squareIB;
 		squareIB = Sisyphus::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
@@ -228,12 +228,12 @@ public:
 	
 
 private:
-	std::shared_ptr<Sisyphus::Shader> m_Shader;
-	std::shared_ptr<Sisyphus::VertexArray> m_VertexArray;
+	Sisyphus::Ref<Sisyphus::Shader> m_Shader;
+	Sisyphus::Ref<Sisyphus::VertexArray> m_VertexArray;
 
 
-	std::shared_ptr<Sisyphus::Shader> m_FlatColorShader;
-	std::shared_ptr<Sisyphus::VertexArray> m_SquareVA;
+	Sisyphus::Ref<Sisyphus::Shader> m_FlatColorShader;
+	Sisyphus::Ref<Sisyphus::VertexArray> m_SquareVA;
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 
