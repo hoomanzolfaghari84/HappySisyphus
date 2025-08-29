@@ -38,16 +38,17 @@ public:
 		m_SquareVA = Sisyphus::VertexArray::Create();
 
 
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.f , 0.f,
+			 0.5f, -0.5f, 0.0f, 1.f , 0.f,
+			 0.5f,  0.5f, 0.0f, 1.f , 1.f,
+			-0.5f,  0.5f, 0.0f, 0.f , 1.f
 		};
 
 		Sisyphus::Ref<Sisyphus::VertexBuffer> squareVB = Sisyphus::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVB->SetLayout({
-			{ Sisyphus::ShaderDataType::Float3, "a_Position" }
+			{ Sisyphus::ShaderDataType::Float3, "a_Position" },
+			{ Sisyphus::ShaderDataType::Float2, "a_TexCoord" }
 			});
 		m_SquareVA->AddVertexBuffer(squareVB);
 
@@ -56,6 +57,7 @@ public:
 		squareIB = Sisyphus::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
+		
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -95,6 +97,8 @@ public:
 		m_Shader = Sisyphus::Shader::Create("Traingle Shader", vertexSrc, fragmentSrc);
 
 
+		// Square
+
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
 			
@@ -128,6 +132,53 @@ public:
 		)";
 
 		m_FlatColorShader = Sisyphus::Shader::Create("Squares Shader", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
+
+
+		// Texture
+
+
+		std::string textureShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+			
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader = Sisyphus::Shader::Create("Texture Shader", textureShaderVertexSrc, textureShaderFragmentSrc);
+
+
+		m_Texture = Sisyphus::Texture2D::Create("assets/textures/Checkerboard.png");
+
+
+		m_TextureShader->Bind();
+		m_TextureShader->SetInt("u_Texture", 0);
+		
 
 	}
 
@@ -189,10 +240,12 @@ public:
 		Sisyphus::Renderer::BeginScene(m_Camera);
 
 
+
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
 		m_FlatColorShader->Bind();
 		m_FlatColorShader->SetFloat3("u_Color", m_SquareColor);
+
 
 		for (int y = 0; y < 20; y++)
 		{
@@ -205,9 +258,19 @@ public:
 		}
 
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.f), m_TrianglePosition);
 
-		Sisyphus::Renderer::Submit(m_Shader, m_VertexArray, transform);
+		m_Texture->Bind();
+
+
+		Sisyphus::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5)));
+		
+
+
+		// Triangle
+		//glm::mat4 transform = glm::translate(glm::mat4(1.f), m_TrianglePosition);
+		//Sisyphus::Renderer::Submit(m_Shader, m_VertexArray, transform);
+
+
 
 		Sisyphus::Renderer::EndScene();
 
@@ -231,8 +294,9 @@ private:
 	Sisyphus::Ref<Sisyphus::Shader> m_Shader;
 	Sisyphus::Ref<Sisyphus::VertexArray> m_VertexArray;
 
+	Sisyphus::Ref<Sisyphus::Texture2D> m_Texture;
 
-	Sisyphus::Ref<Sisyphus::Shader> m_FlatColorShader;
+	Sisyphus::Ref<Sisyphus::Shader> m_FlatColorShader, m_TextureShader;
 	Sisyphus::Ref<Sisyphus::VertexArray> m_SquareVA;
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
@@ -271,7 +335,7 @@ Sisyphus::Application* Sisyphus::CreateApplication(Sisyphus::ApplicationCommandL
 {
 	ApplicationSpecification spec;
 	spec.Name = "Sandbox";
-	spec.WorkingDirectory = "../Boulder";
+	spec.WorkingDirectory = "";//"../Boulder";
 	spec.CommandLineArgs = args;
 
 	return new SandboxApp(spec);

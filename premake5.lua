@@ -8,12 +8,6 @@ workspace "HappySisyphus"
 -- Output directory format
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- IncludeDir = {}
--- IncludeDir["GLFW"] = "Sisyphus/vendor/GLFW/include"
--- IncludeDir["Glad"] = "Sisyphus/vendor/Glad/include"
--- IncludeDir["ImGui"] = "Sisyphus/vendor/imgui"
--- IncludeDir["glm"] = "Sisyphus/vendor/glm"
-
 include "Dependencies.lua"
 
 include "Sisyphus/vendor/GLFW"
@@ -42,6 +36,8 @@ project "Sisyphus"
     files { "%{prj.name}/src/**.h",
      "%{prj.name}/src/**.hpp",
      "%{prj.name}/src/**.cpp",
+     "%{prj.name}/vendor/stb_image/**.h", 
+     "%{prj.name}/vendor/stb_image/**.cpp", 
      "%{prj.name}/vendor/glm/glm/**.hpp", 
      "%{prj.name}/vendor/glm/glm/**.inl" 
     }
@@ -52,7 +48,8 @@ project "Sisyphus"
     "%{IncludeDir.Glad}",
     "%{IncludeDir.ImGui}",
     "%{IncludeDir.glm}",
-    "%{IncludeDir.VulkanSDK}"
+    "%{IncludeDir.VulkanSDK}",
+    "%{IncludeDir.stb_image}"
     }
 
     links {"GLFW", "Glad", "ImGui", "opengl32.lib"}

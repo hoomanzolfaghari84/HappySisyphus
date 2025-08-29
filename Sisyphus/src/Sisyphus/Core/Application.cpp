@@ -31,7 +31,7 @@ namespace Sisyphus {
 		if (!m_Specification.WorkingDirectory.empty())
 			std::filesystem::current_path(m_Specification.WorkingDirectory);
 
-		SIPH_CORE_INFO("working Directory: {}", m_Specification.WorkingDirectory);
+		SIPH_CORE_INFO("working Directory: {}", std::filesystem::current_path().string());
 
 		m_Window = Window::Create(WindowProps(m_Specification.Name));
 		m_Window->SetEventCallback(SP_BIND_EVENT_FN(Application::OnEvent));
