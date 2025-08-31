@@ -136,48 +136,16 @@ public:
 
 		// Texture
 
-
-		std::string textureShaderVertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string textureShaderFragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec2 v_TexCoord;
-			
-			uniform sampler2D u_Texture;
-
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-		)";
-
-		m_TextureShader = Sisyphus::Shader::Create("Texture Shader", textureShaderVertexSrc, textureShaderFragmentSrc);
+		m_TextureShader = Sisyphus::Shader::Create("assets/shaders/Texture.glsl");
 
 
 		m_Texture = Sisyphus::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_HSLogoTexture = Sisyphus::Texture2D::Create("assets/textures/HSLogo.png");
 
 
 		m_TextureShader->Bind();
 		m_TextureShader->SetInt("u_Texture", 0);
+		
 		
 
 	}
@@ -258,11 +226,13 @@ public:
 		}
 
 
-
+		
 		m_Texture->Bind();
-
-
 		Sisyphus::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5)));
+
+		m_HSLogoTexture->Bind();
+		Sisyphus::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5)) );
+
 		
 
 
@@ -294,7 +264,7 @@ private:
 	Sisyphus::Ref<Sisyphus::Shader> m_Shader;
 	Sisyphus::Ref<Sisyphus::VertexArray> m_VertexArray;
 
-	Sisyphus::Ref<Sisyphus::Texture2D> m_Texture;
+	Sisyphus::Ref<Sisyphus::Texture2D> m_Texture, m_HSLogoTexture;
 
 	Sisyphus::Ref<Sisyphus::Shader> m_FlatColorShader, m_TextureShader;
 	Sisyphus::Ref<Sisyphus::VertexArray> m_SquareVA;
