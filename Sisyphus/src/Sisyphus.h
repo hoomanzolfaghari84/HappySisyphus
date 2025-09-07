@@ -22,6 +22,7 @@
 #include "Sisyphus/Renderer/VertexArray.h"
 
 #include "Sisyphus/Renderer/OrthographicCamera.h"
+#include "Sisyphus/OrthographicCameraController.h"
 // -----------------------------------
 
 // -------- Entry Point --------------

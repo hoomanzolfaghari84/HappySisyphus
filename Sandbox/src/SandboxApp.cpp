@@ -9,7 +9,7 @@
 class ExampleLayer : public Sisyphus::Layer {
 
 public:
-	ExampleLayer() : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.f), m_TrianglePosition(0.f) {
+	ExampleLayer() : Layer("Example"), m_CameraController(1280.f/720.f, true), m_TrianglePosition(0.f) {
 
 		m_VertexArray = Sisyphus::VertexArray::Create();
 
@@ -31,33 +31,7 @@ public:
 
 		unsigned int indices[3] = { 0,1,2 };
 		Sisyphus::Ref<Sisyphus::IndexBuffer> indexBuffer = Sisyphus::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-		m_VertexArray->SetIndexBuffer(indexBuffer);
-
-
-
-		m_SquareVA = Sisyphus::VertexArray::Create();
-
-
-		float squareVertices[5 * 4] = {
-			-0.5f, -0.5f, 0.0f, 0.f , 0.f,
-			 0.5f, -0.5f, 0.0f, 1.f , 0.f,
-			 0.5f,  0.5f, 0.0f, 1.f , 1.f,
-			-0.5f,  0.5f, 0.0f, 0.f , 1.f
-		};
-
-		Sisyphus::Ref<Sisyphus::VertexBuffer> squareVB = Sisyphus::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
-		squareVB->SetLayout({
-			{ Sisyphus::ShaderDataType::Float3, "a_Position" },
-			{ Sisyphus::ShaderDataType::Float2, "a_TexCoord" }
-			});
-		m_SquareVA->AddVertexBuffer(squareVB);
-
-		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Sisyphus::Ref<Sisyphus::IndexBuffer> squareIB;
-		squareIB = Sisyphus::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
-		m_SquareVA->SetIndexBuffer(squareIB);
-
-		
+		m_VertexArray->SetIndexBuffer(indexBuffer);		
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -94,10 +68,33 @@ public:
 			}
 		)";
 
-		m_Shader = Sisyphus::Shader::Create("Traingle Shader", vertexSrc, fragmentSrc);
+		m_Shader = Sisyphus::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
 
 		// Square
+
+
+		m_SquareVA = Sisyphus::VertexArray::Create();
+
+
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.f , 0.f,
+			 0.5f, -0.5f, 0.0f, 1.f , 0.f,
+			 0.5f,  0.5f, 0.0f, 1.f , 1.f,
+			-0.5f,  0.5f, 0.0f, 0.f , 1.f
+		};
+
+		Sisyphus::Ref<Sisyphus::VertexBuffer> squareVB = Sisyphus::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		squareVB->SetLayout({
+			{ Sisyphus::ShaderDataType::Float3, "a_Position" },
+			{ Sisyphus::ShaderDataType::Float2, "a_TexCoord" }
+			});
+		m_SquareVA->AddVertexBuffer(squareVB);
+
+		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+		Sisyphus::Ref<Sisyphus::IndexBuffer> squareIB;
+		squareIB = Sisyphus::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
@@ -131,55 +128,30 @@ public:
 			}
 		)";
 
-		m_FlatColorShader = Sisyphus::Shader::Create("Squares Shader", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
+		m_FlatColorShader = Sisyphus::Shader::Create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
 
 		// Texture
 
-		m_TextureShader = Sisyphus::Shader::Create("assets/shaders/Texture.glsl");
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
 
 		m_Texture = Sisyphus::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_HSLogoTexture = Sisyphus::Texture2D::Create("assets/textures/HSLogo.png");
 
 
-		m_TextureShader->Bind();
-		m_TextureShader->SetInt("u_Texture", 0);
+		textureShader->Bind();
+		textureShader->SetInt("u_Texture", 0);
 		
 		
 
 	}
 
 	void OnUpdate(Sisyphus::Timestep ts) override {
+		
+		// Update
 
-
-		if (Sisyphus::Input::IsKeyPressed( Sisyphus::Key::Left )) {
-			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-		}
-
-		else if (Sisyphus::Input::IsKeyPressed( Sisyphus::Key::Right)) {
-			m_CameraPosition.x += m_CameraMoveSpeed * ts;
-		}
-
-		if (Sisyphus::Input::IsKeyPressed( Sisyphus::Key::Down )) {
-			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
-		}
-
-		else if (Sisyphus::Input::IsKeyPressed( Sisyphus::Key::Up   )){
-			m_CameraPosition.y += m_CameraMoveSpeed * ts;
-		}
-
-
-
-		if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::Q)) {
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		}
-		else if(Sisyphus::Input::IsKeyPressed(Sisyphus::Key::E))
-		{
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-
-		}
-
+		m_CameraController.OnUpdate(ts);
 
 		if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::A)) {
 			m_TrianglePosition.x -= m_TriangleMoveSpeed * ts;
@@ -198,15 +170,13 @@ public:
 		}
 		
 
+		// Render
+
 		Sisyphus::RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
 		Sisyphus::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-
-		Sisyphus::Renderer::BeginScene(m_Camera);
-
+	
+		Sisyphus::Renderer::BeginScene(m_CameraController.GetCamera());
 
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
@@ -226,12 +196,14 @@ public:
 		}
 
 
+
+		auto textureShader = m_ShaderLibrary.Get("Texture");
 		
 		m_Texture->Bind();
-		Sisyphus::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5)));
+		Sisyphus::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5)));
 
 		m_HSLogoTexture->Bind();
-		Sisyphus::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5)) );
+		Sisyphus::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5)) );
 
 		
 
@@ -254,29 +226,28 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(Sisyphus::Event& event) override {
+	void OnEvent(Sisyphus::Event& e) override {
+		m_CameraController.OnEvent(e);
 
+		
 	}
 	
 	
 
 private:
+	Sisyphus::ShaderLibrary m_ShaderLibrary;
+
 	Sisyphus::Ref<Sisyphus::Shader> m_Shader;
 	Sisyphus::Ref<Sisyphus::VertexArray> m_VertexArray;
 
 	Sisyphus::Ref<Sisyphus::Texture2D> m_Texture, m_HSLogoTexture;
 
-	Sisyphus::Ref<Sisyphus::Shader> m_FlatColorShader, m_TextureShader;
+	Sisyphus::Ref<Sisyphus::Shader> m_FlatColorShader;
 	Sisyphus::Ref<Sisyphus::VertexArray> m_SquareVA;
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 
-	Sisyphus::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 5.f;
-
-	float m_CameraRotation = 0.f;
-	float m_CameraRotationSpeed = 180.f;
+	Sisyphus::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_TrianglePosition;
 	float m_TriangleMoveSpeed = 1.5f;
