@@ -14,6 +14,7 @@
 
 // -------- Renderer -----------------
 #include "Sisyphus/Renderer/Renderer.h"
+#include "Sisyphus/Renderer/Renderer2D.h"
 #include "Sisyphus/Renderer/RenderCommand.h"
 
 #include "Sisyphus/Renderer/Buffer.h"
@@ -25,7 +26,5 @@
 #include "Sisyphus/OrthographicCameraController.h"
 // -----------------------------------
 
-// -------- Entry Point --------------
-#include "Sisyphus/Core/EntryPoint.h"
-// -----------------------------------
+
 

@@ -1,5 +1,11 @@
 #include <iostream>
+
 #include <Sisyphus.h>
+// -------- Entry Point --------------
+#include "Sisyphus/Core/EntryPoint.h"
+// -----------------------------------
+
+#include "Sandbox2D.h"
 
 #include "imgui/imgui.h"
 
@@ -261,7 +267,8 @@ public:
 	SandboxApp(const Sisyphus::ApplicationSpecification& specification)
 		: Sisyphus::Application(specification)
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 		SIPH_TRACE("Sandbox App Initialized");
 	}
 

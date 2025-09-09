@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "MSDFData.h"
+//#include "MSDFData.h"
 
 namespace Sisyphus {
 
@@ -226,14 +226,14 @@ namespace Sisyphus {
 
 	void Renderer2D::Shutdown()
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		delete[] s_Data.QuadVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjectionMatrix();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
@@ -243,7 +243,7 @@ namespace Sisyphus {
 
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
@@ -251,19 +251,19 @@ namespace Sisyphus {
 		StartBatch();
 	}
 
-	void Renderer2D::BeginScene(const EditorCamera& camera)
+	/*void Renderer2D::BeginScene(const EditorCamera& camera)
 	{
-		HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
-	}
+	}*/
 
 	void Renderer2D::EndScene()
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		Flush();
 	}
@@ -289,6 +289,8 @@ namespace Sisyphus {
 	{
 		if (s_Data.QuadIndexCount)
 		{
+
+
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
 			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
@@ -349,7 +351,7 @@ namespace Sisyphus {
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
@@ -364,7 +366,7 @@ namespace Sisyphus {
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
@@ -374,7 +376,9 @@ namespace Sisyphus {
 
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
+
+		
 
 		constexpr size_t quadVertexCount = 4;
 		const float textureIndex = 0.0f; // White Texture
@@ -398,11 +402,13 @@ namespace Sisyphus {
 		s_Data.QuadIndexCount += 6;
 
 		s_Data.Stats.QuadCount++;
+
+		//std::cout << "draw quad submitted" << std::endl;
 	}
 
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
@@ -453,7 +459,7 @@ namespace Sisyphus {
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
@@ -469,7 +475,7 @@ namespace Sisyphus {
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
@@ -480,7 +486,7 @@ namespace Sisyphus {
 
 	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness /*= 1.0f*/, float fade /*= 0.005f*/, int entityID /*= -1*/)
 	{
-		HZ_PROFILE_FUNCTION();
+		//HS_PROFILE_FUNCTION();
 
 		// TODO: implement for circles
 		// if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -542,131 +548,131 @@ namespace Sisyphus {
 		DrawLine(lineVertices[3], lineVertices[0], color, entityID);
 	}
 
-	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID)
+	/*void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID)
 	{
 		if (src.Texture)
 			DrawQuad(transform, src.Texture, src.TilingFactor, src.Color, entityID);
 		else
 			DrawQuad(transform, src.Color, entityID);
-	}
+	}*/
 
-	void Renderer2D::DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID)
-	{
-		const auto& fontGeometry = font->GetMSDFData()->FontGeometry;
-		const auto& metrics = fontGeometry.getMetrics();
-		Ref<Texture2D> fontAtlas = font->GetAtlasTexture();
+	//void Renderer2D::DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID)
+	//{
+	//	const auto& fontGeometry = font->GetMSDFData()->FontGeometry;
+	//	const auto& metrics = fontGeometry.getMetrics();
+	//	Ref<Texture2D> fontAtlas = font->GetAtlasTexture();
 
-		s_Data.FontAtlasTexture = fontAtlas;
+	//	s_Data.FontAtlasTexture = fontAtlas;
 
-		double x = 0.0;
-		double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
-		double y = 0.0;
+	//	double x = 0.0;
+	//	double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
+	//	double y = 0.0;
 
-		const float spaceGlyphAdvance = fontGeometry.getGlyph(' ')->getAdvance();
+	//	const float spaceGlyphAdvance = fontGeometry.getGlyph(' ')->getAdvance();
 
-		for (size_t i = 0; i < string.size(); i++)
-		{
-			char character = string[i];
-			if (character == '\r')
-				continue;
+	//	for (size_t i = 0; i < string.size(); i++)
+	//	{
+	//		char character = string[i];
+	//		if (character == '\r')
+	//			continue;
 
-			if (character == '\n')
-			{
-				x = 0;
-				y -= fsScale * metrics.lineHeight + textParams.LineSpacing;
-				continue;
-			}
+	//		if (character == '\n')
+	//		{
+	//			x = 0;
+	//			y -= fsScale * metrics.lineHeight + textParams.LineSpacing;
+	//			continue;
+	//		}
 
-			if (character == ' ')
-			{
-				float advance = spaceGlyphAdvance;
-				if (i < string.size() - 1)
-				{
-					char nextCharacter = string[i + 1];
-					double dAdvance;
-					fontGeometry.getAdvance(dAdvance, character, nextCharacter);
-					advance = (float)dAdvance;
-				}
+	//		if (character == ' ')
+	//		{
+	//			float advance = spaceGlyphAdvance;
+	//			if (i < string.size() - 1)
+	//			{
+	//				char nextCharacter = string[i + 1];
+	//				double dAdvance;
+	//				fontGeometry.getAdvance(dAdvance, character, nextCharacter);
+	//				advance = (float)dAdvance;
+	//			}
 
-				x += fsScale * advance + textParams.Kerning;
-				continue;
-			}
+	//			x += fsScale * advance + textParams.Kerning;
+	//			continue;
+	//		}
 
-			if (character == '\t')
-			{
-				// NOTE(Yan): is this right?
-				x += 4.0f * (fsScale * spaceGlyphAdvance + textParams.Kerning);
-				continue;
-			}
+	//		if (character == '\t')
+	//		{
+	//			// NOTE(Yan): is this right?
+	//			x += 4.0f * (fsScale * spaceGlyphAdvance + textParams.Kerning);
+	//			continue;
+	//		}
 
-			auto glyph = fontGeometry.getGlyph(character);
-			if (!glyph)
-				glyph = fontGeometry.getGlyph('?');
-			if (!glyph)
-				return;
+	//		auto glyph = fontGeometry.getGlyph(character);
+	//		if (!glyph)
+	//			glyph = fontGeometry.getGlyph('?');
+	//		if (!glyph)
+	//			return;
 
-			double al, ab, ar, at;
-			glyph->getQuadAtlasBounds(al, ab, ar, at);
-			glm::vec2 texCoordMin((float)al, (float)ab);
-			glm::vec2 texCoordMax((float)ar, (float)at);
+	//		double al, ab, ar, at;
+	//		glyph->getQuadAtlasBounds(al, ab, ar, at);
+	//		glm::vec2 texCoordMin((float)al, (float)ab);
+	//		glm::vec2 texCoordMax((float)ar, (float)at);
 
-			double pl, pb, pr, pt;
-			glyph->getQuadPlaneBounds(pl, pb, pr, pt);
-			glm::vec2 quadMin((float)pl, (float)pb);
-			glm::vec2 quadMax((float)pr, (float)pt);
+	//		double pl, pb, pr, pt;
+	//		glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+	//		glm::vec2 quadMin((float)pl, (float)pb);
+	//		glm::vec2 quadMax((float)pr, (float)pt);
 
-			quadMin *= fsScale, quadMax *= fsScale;
-			quadMin += glm::vec2(x, y);
-			quadMax += glm::vec2(x, y);
+	//		quadMin *= fsScale, quadMax *= fsScale;
+	//		quadMin += glm::vec2(x, y);
+	//		quadMax += glm::vec2(x, y);
 
-			float texelWidth = 1.0f / fontAtlas->GetWidth();
-			float texelHeight = 1.0f / fontAtlas->GetHeight();
-			texCoordMin *= glm::vec2(texelWidth, texelHeight);
-			texCoordMax *= glm::vec2(texelWidth, texelHeight);
+	//		float texelWidth = 1.0f / fontAtlas->GetWidth();
+	//		float texelHeight = 1.0f / fontAtlas->GetHeight();
+	//		texCoordMin *= glm::vec2(texelWidth, texelHeight);
+	//		texCoordMax *= glm::vec2(texelWidth, texelHeight);
 
-			// render here
-			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin, 0.0f, 1.0f);
-			s_Data.TextVertexBufferPtr->Color = textParams.Color;
-			s_Data.TextVertexBufferPtr->TexCoord = texCoordMin;
-			s_Data.TextVertexBufferPtr->EntityID = entityID;
-			s_Data.TextVertexBufferPtr++;
+	//		// render here
+	//		s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin, 0.0f, 1.0f);
+	//		s_Data.TextVertexBufferPtr->Color = textParams.Color;
+	//		s_Data.TextVertexBufferPtr->TexCoord = texCoordMin;
+	//		s_Data.TextVertexBufferPtr->EntityID = entityID;
+	//		s_Data.TextVertexBufferPtr++;
 
-			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
-			s_Data.TextVertexBufferPtr->Color = textParams.Color;
-			s_Data.TextVertexBufferPtr->TexCoord = { texCoordMin.x, texCoordMax.y };
-			s_Data.TextVertexBufferPtr->EntityID = entityID;
-			s_Data.TextVertexBufferPtr++;
+	//		s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
+	//		s_Data.TextVertexBufferPtr->Color = textParams.Color;
+	//		s_Data.TextVertexBufferPtr->TexCoord = { texCoordMin.x, texCoordMax.y };
+	//		s_Data.TextVertexBufferPtr->EntityID = entityID;
+	//		s_Data.TextVertexBufferPtr++;
 
-			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax, 0.0f, 1.0f);
-			s_Data.TextVertexBufferPtr->Color = textParams.Color;
-			s_Data.TextVertexBufferPtr->TexCoord = texCoordMax;
-			s_Data.TextVertexBufferPtr->EntityID = entityID;
-			s_Data.TextVertexBufferPtr++;
+	//		s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax, 0.0f, 1.0f);
+	//		s_Data.TextVertexBufferPtr->Color = textParams.Color;
+	//		s_Data.TextVertexBufferPtr->TexCoord = texCoordMax;
+	//		s_Data.TextVertexBufferPtr->EntityID = entityID;
+	//		s_Data.TextVertexBufferPtr++;
 
-			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
-			s_Data.TextVertexBufferPtr->Color = textParams.Color;
-			s_Data.TextVertexBufferPtr->TexCoord = { texCoordMax.x, texCoordMin.y };
-			s_Data.TextVertexBufferPtr->EntityID = entityID;
-			s_Data.TextVertexBufferPtr++;
+	//		s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
+	//		s_Data.TextVertexBufferPtr->Color = textParams.Color;
+	//		s_Data.TextVertexBufferPtr->TexCoord = { texCoordMax.x, texCoordMin.y };
+	//		s_Data.TextVertexBufferPtr->EntityID = entityID;
+	//		s_Data.TextVertexBufferPtr++;
 
-			s_Data.TextIndexCount += 6;
-			s_Data.Stats.QuadCount++;
+	//		s_Data.TextIndexCount += 6;
+	//		s_Data.Stats.QuadCount++;
 
-			if (i < string.size() - 1)
-			{
-				double advance = glyph->getAdvance();
-				char nextCharacter = string[i + 1];
-				fontGeometry.getAdvance(advance, character, nextCharacter);
+	//		if (i < string.size() - 1)
+	//		{
+	//			double advance = glyph->getAdvance();
+	//			char nextCharacter = string[i + 1];
+	//			fontGeometry.getAdvance(advance, character, nextCharacter);
 
-				x += fsScale * advance + textParams.Kerning;
-			}
-		}
-	}
+	//			x += fsScale * advance + textParams.Kerning;
+	//		}
+	//	}
+	//}
 
-	void Renderer2D::DrawString(const std::string& string, const glm::mat4& transform, const TextComponent& component, int entityID)
-	{
-		DrawString(string, component.FontAsset, transform, { component.Color, component.Kerning, component.LineSpacing }, entityID);
-	}
+	//void Renderer2D::DrawString(const std::string& string, const glm::mat4& transform, const TextComponent& component, int entityID)
+	//{
+	//	DrawString(string, component.FontAsset, transform, { component.Color, component.Kerning, component.LineSpacing }, entityID);
+	//}
 
 	float Renderer2D::GetLineWidth()
 	{

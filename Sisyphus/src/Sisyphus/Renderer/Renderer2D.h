@@ -5,10 +5,10 @@
 #include "Sisyphus/Renderer/Texture.h"
 
 #include "Sisyphus/Renderer/Camera.h"
-#include "Sisyphus/Renderer/EditorCamera.h"
-#include "Sisyphus/Renderer/Font.h"
+//#include "Sisyphus/Re/*nderer/EditorCamera.h"
+//#include "Sisyphus/Renderer/Font.h"*/
 
-#include "Sisyphus/Scene/Components.h"
+//#include "Sisyphus/Scene/Components.h"
 
 namespace Sisyphus {
 
@@ -19,7 +19,7 @@ namespace Sisyphus {
 		static void Shutdown();
 
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
-		static void BeginScene(const EditorCamera& camera);
+		//static void BeginScene(const EditorCamera& camera);
 		static void BeginScene(const OrthographicCamera& camera); // TODO: Remove
 		static void EndScene();
 		static void Flush();
@@ -45,7 +45,7 @@ namespace Sisyphus {
 		static void DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID = -1);
 		static void DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID = -1);
 
-		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID);
+		//static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID);
 
 		struct TextParams
 		{
@@ -53,8 +53,8 @@ namespace Sisyphus {
 			float Kerning = 0.0f;
 			float LineSpacing = 0.0f;
 		};
-		static void DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID = -1);
-		static void DrawString(const std::string& string, const glm::mat4& transform, const TextComponent& component, int entityID = -1);
+		/*static void DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID = -1);
+		static void DrawString(const std::string& string, const glm::mat4& transform, const TextComponent& component, int entityID = -1);*/
 
 		static float GetLineWidth();
 		static void SetLineWidth(float width);
