@@ -5,8 +5,8 @@
 #include "Sisyphus/Renderer/Texture.h"
 
 #include "Sisyphus/Renderer/Camera.h"
-//#include "Sisyphus/Re/*nderer/EditorCamera.h"
-//#include "Sisyphus/Renderer/Font.h"*/
+//#include "Sisyphus/Renderer/EditorCamera.h"
+//#include "Sisyphus/Renderer/Font.h"
 
 //#include "Sisyphus/Scene/Components.h"
 

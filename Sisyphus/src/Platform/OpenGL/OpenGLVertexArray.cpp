@@ -28,35 +28,35 @@ namespace Sisyphus {
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 
 	void OpenGLVertexArray::Bind() const
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glBindVertexArray(m_RendererID);
 	}
 
 	void OpenGLVertexArray::Unbind() const
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		SP_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
@@ -126,7 +126,7 @@ namespace Sisyphus {
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();

@@ -8,7 +8,6 @@ namespace Sisyphus {
 
 	Ref<GraphicsContext> GraphicsContext::Create(void* window)
 	{
-		//return Ref::CreateRef<OpenGLContext>(static_cast<GLFWwindow*>(window));
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;

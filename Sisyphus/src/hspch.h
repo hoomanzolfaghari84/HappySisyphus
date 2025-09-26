@@ -14,8 +14,9 @@
 #include <unordered_set>
 
 #include "Sisyphus/Core/Base.h"
-
 #include "Sisyphus/Core/Log.h"
+
+#include "Sisyphus/Debug/Instrumentor.h"
 
 #ifdef SP_PLATFORM_WINDOWS
 	#include <Windows.h>

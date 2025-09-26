@@ -1,13 +1,13 @@
 #include "hspch.h"
 #include "WindowsWindow.h"
 
-//#include "Sisyphus/Core/Input.h"
+#include "Sisyphus/Core/Input.h"
 
 #include "Sisyphus/Events/ApplicationEvent.h"
 #include "Sisyphus/Events/MouseEvent.h"
 #include "Sisyphus/Events/KeyEvent.h"
 
-//#include "Sisyphus/Renderer/Renderer.h"
+#include "Sisyphus/Renderer/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLContext.h"
 
@@ -22,21 +22,21 @@ namespace Sisyphus {
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
@@ -46,17 +46,17 @@ namespace Sisyphus {
 
 		if (s_GLFWWindowCount == 0)
 		{
-			//HZ_PROFILE_SCOPE("glfwInit");
+			HS_PROFILE_SCOPE("glfwInit");
 			int success = glfwInit();
 			SP_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
 		{
-			//HZ_PROFILE_SCOPE("glfwCreateWindow");
+			HS_PROFILE_SCOPE("glfwCreateWindow");
 #if defined(SP_DEBUG)
-			/*if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
-				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);*/
+			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 #endif
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
@@ -157,12 +157,12 @@ namespace Sisyphus {
 				MouseMovedEvent event((float)xPos, (float)yPos);
 				data.EventCallback(event);
 			});
-		//
+		
 	}
 
 	void WindowsWindow::Shutdown()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glfwDestroyWindow(m_Window);
 		--s_GLFWWindowCount;
@@ -175,7 +175,7 @@ namespace Sisyphus {
 
 	void WindowsWindow::OnUpdate()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glfwPollEvents();
 		m_Context->SwapBuffers();
@@ -183,7 +183,7 @@ namespace Sisyphus {
 
 	void WindowsWindow::SetVSync(bool enabled)
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		if (enabled)
 			glfwSwapInterval(1);

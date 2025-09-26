@@ -38,7 +38,7 @@ void Sandbox2D::OnAttach()
 
 	m_FlatColorShader = Sisyphus::Shader::Create("assets/shaders/FlatColor.glsl");*/
 
-
+	m_Texture = Sisyphus::Texture2D::Create("assets/textures/Checkerboard.png");
 
 }
 
@@ -65,7 +65,13 @@ void Sandbox2D::OnUpdate(Sisyphus::Timestep ts)
 
 	Sisyphus::Renderer::Submit(m_FlatColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5)));*/
 
-	Sisyphus::Renderer2D::DrawQuad(glm::scale(glm::mat4(1.0f), glm::vec3(1.5)), m_SquareColor);
+	//Sisyphus::Renderer2D::DrawQuad(glm::scale(glm::mat4(1.0f), glm::vec3(1.5)), m_SquareColor);
+	Sisyphus::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1 }, {10.f, 10.f} , m_Texture);
+	Sisyphus::Renderer2D::DrawQuad({ -1.f, 0.f }, {0.8f, 0.8f} , {0.8f, 0.2f, 0.3f, 1.0f});
+	Sisyphus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, {0.5f, 0.75f} , {0.2f, 0.3f, 0.8f, 1.0f});
+
+
+	
 
 	Sisyphus::Renderer2D::EndScene();
 }

@@ -11,7 +11,6 @@ namespace Sisyphus {
 
 	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
-		//return Ref::CreateRef<OpenGLVertexBuffer>(size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
@@ -24,7 +23,6 @@ namespace Sisyphus {
 
 	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
-		//return Ref::CreateRef<OpenGLVertexBuffer>(vertices, size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
@@ -37,7 +35,6 @@ namespace Sisyphus {
 
 	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{
-		//return Ref::CreateRef<OpenGLIndexBuffer>(indices, size);
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    SP_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;

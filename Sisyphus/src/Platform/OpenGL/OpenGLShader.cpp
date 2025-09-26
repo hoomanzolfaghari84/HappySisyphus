@@ -167,7 +167,7 @@ namespace Sisyphus {
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 		: m_FilePath(filepath)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		// Utils::CreateCacheDirectoryIfNeeded();
 
@@ -196,7 +196,7 @@ namespace Sisyphus {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -211,14 +211,14 @@ namespace Sisyphus {
 
 	OpenGLShader::~OpenGLShader()
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glDeleteProgram(m_RendererID);
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary); // ifstream closes itself due to RAII
@@ -454,21 +454,21 @@ namespace Sisyphus {
 
 	void OpenGLShader::Bind() const
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		UploadUniformInt(name, value);
 	}
@@ -480,35 +480,35 @@ namespace Sisyphus {
 
 	void OpenGLShader::SetFloat(const std::string& name, float value)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		UploadUniformFloat(name, value);
 	}
 
 	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		UploadUniformFloat2(name, value);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		UploadUniformFloat3(name, value);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		UploadUniformFloat4(name, value);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		UploadUniformMat4(name, value);
 	}

@@ -25,7 +25,7 @@ namespace Sisyphus {
 
 	void ImGuiLayer::OnAttach()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -66,7 +66,7 @@ namespace Sisyphus {
 
 	void ImGuiLayer::OnDetach()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
@@ -75,7 +75,6 @@ namespace Sisyphus {
 
 	void ImGuiLayer::OnEvent(Event& e)
 	{
-		//SIPH_CORE_INFO("{}",e.ToString());
 		if (m_BlockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
@@ -86,7 +85,7 @@ namespace Sisyphus {
 
 	void ImGuiLayer::Begin()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		//glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Dark grey
 		
@@ -100,7 +99,7 @@ namespace Sisyphus {
 
 	void ImGuiLayer::End()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
 

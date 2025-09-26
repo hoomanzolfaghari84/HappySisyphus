@@ -15,7 +15,7 @@ namespace Sisyphus {
 
 	void OpenGLContext::Init()
 	{
-		//SP_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -31,7 +31,7 @@ namespace Sisyphus {
 
 	void OpenGLContext::SwapBuffers()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		glfwSwapBuffers(m_WindowHandle);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

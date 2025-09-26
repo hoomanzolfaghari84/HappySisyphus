@@ -2,6 +2,7 @@
 
 #include "Sisyphus/Core/Base.h"
 #include "Sisyphus/Core/Application.h"
+#include <Sisyphus/Debug/Instrumentor.h>
 
 #ifdef SP_PLATFORM_WINDOWS
 
@@ -11,17 +12,17 @@ int main(int argc, char** argv)
 {
 	Sisyphus::Log::Init();
 
-	//SP_PROFILE_BEGIN_SESSION("Startup", "HazelProfile-Startup.json");
+	HS_PROFILE_BEGIN_SESSION("Startup", "HazelProfile-Startup.json");
 	auto app = Sisyphus::CreateApplication({ argc, argv });
-	//SP_PROFILE_END_SESSION();
+	HS_PROFILE_END_SESSION();
 
-	//SP_PROFILE_BEGIN_SESSION("Runtime", "HazelProfile-Runtime.json");
+	HS_PROFILE_BEGIN_SESSION("Runtime", "HazelProfile-Runtime.json");
 	app->Run();
-	//SP_PROFILE_END_SESSION();
+	HS_PROFILE_END_SESSION();
 
-	//SP_PROFILE_BEGIN_SESSION("Shutdown", "HazelProfile-Shutdown.json");
+	HS_PROFILE_BEGIN_SESSION("Shutdown", "HazelProfile-Shutdown.json");
 	delete app;
-	//SP_PROFILE_END_SESSION();
+	HS_PROFILE_END_SESSION();
 }
 
 #endif

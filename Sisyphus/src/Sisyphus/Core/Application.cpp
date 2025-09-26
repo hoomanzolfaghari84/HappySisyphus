@@ -15,14 +15,7 @@ namespace Sisyphus {
 	Application::Application(const ApplicationSpecification& specification)
 		: m_Specification(specification)
 	{
-		/*HZ_PROFILE_FUNCTION();*/
-
-		/*LogVec3(m_Camera.GetPosition(), "Camera Position");
-		std::cout << "Camera Rotation: " << m_Camera.GetRotation() << "\n";
-
-		LogMat4(m_Camera.GetProjectionMatrix(), "Projection Matrix");
-		LogMat4(m_Camera.GetViewMatrix(), "View Matrix");
-		LogMat4(m_Camera.GetViewProjectionMatrix(), "ViewProjection Matrix");*/
+		HS_PROFILE_FUNCTION();
 
 		SP_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -51,7 +44,7 @@ namespace Sisyphus {
 
 	void Application::PushLayer(Layer* layer)
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
@@ -59,7 +52,7 @@ namespace Sisyphus {
 
 	void Application::PushOverlay(Layer* layer)
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
@@ -67,11 +60,11 @@ namespace Sisyphus {
 
 	void Application::Run()
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		while (m_Running)
 		{
-			//HZ_PROFILE_SCOPE("RunLoop");
+			HS_PROFILE_SCOPE("RunLoop");
 
 			float time = Time::GetTime();
 			Timestep timestep = time - m_LastFrameTime;
@@ -82,7 +75,7 @@ namespace Sisyphus {
 			if (!m_Minimized)
 			{
 				{
-					//HZ_PROFILE_SCOPE("LayerStack OnUpdate");
+					HS_PROFILE_SCOPE("LayerStack OnUpdate");
 
 					for (Layer* layer : m_LayerStack)
 						layer->OnUpdate(timestep);
@@ -90,7 +83,7 @@ namespace Sisyphus {
 
 				m_ImGuiLayer->Begin();
 				{
-					//HZ_PROFILE_SCOPE("LayerStack OnImGuiRender");
+					HS_PROFILE_SCOPE("LayerStack OnImGuiRender");
 
 					for (Layer* layer : m_LayerStack)
 						layer->OnImGuiRender();
@@ -116,12 +109,12 @@ namespace Sisyphus {
 
 	void Application::OnEvent(Event& e)
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(SP_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(SP_BIND_EVENT_FN(Application::OnWindowResize));
-		//SIPH_CORE_INFO("Event {}", e.GetName());
+
 		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
 		{
 			if (e.Handled)
@@ -138,7 +131,7 @@ namespace Sisyphus {
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
-		//HZ_PROFILE_FUNCTION();
+		HS_PROFILE_FUNCTION();
 
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
