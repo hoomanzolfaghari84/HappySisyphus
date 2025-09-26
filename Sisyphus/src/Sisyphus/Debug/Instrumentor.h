@@ -202,7 +202,7 @@ namespace Sisyphus {
 	}
 }
 
-#define HS_PROFILE 1
+#define HS_PROFILE 0
 #if HS_PROFILE
 	// Resolve which function signature macro will be used. Note that this only
 	// is resolved when the (pre)compiler starts, so the syntax highlighting
