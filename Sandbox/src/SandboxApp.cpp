@@ -6,6 +6,7 @@
 // -----------------------------------
 
 #include "Sandbox2D.h"
+#include "Sandbox3D.h"
 
 #include "imgui/imgui.h"
 
@@ -268,7 +269,8 @@ public:
 		: Sisyphus::Application(specification)
 	{
 		//PushLayer(new ExampleLayer());
-		PushLayer(new Sandbox2D());
+		//PushLayer(new Sandbox2D());
+		PushLayer(new Sandbox3D());
 		SIPH_TRACE("Sandbox App Initialized");
 	}
 

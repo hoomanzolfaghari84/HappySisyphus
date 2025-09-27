@@ -1,6 +1,7 @@
 #include "hspch.h"
 #include "Renderer.h"
 #include "Sisyphus/Renderer/Renderer2D.h"
+#include "Sisyphus/Renderer/Renderer3D.h"
 
 namespace Sisyphus {
 
@@ -11,6 +12,7 @@ namespace Sisyphus {
 		HS_PROFILE_FUNCTION();
 		RenderCommand::Init();
 		Renderer2D::Init();
+		Renderer3D::Init();
 	}
 
 	void Renderer::Shutdown()

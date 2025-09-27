@@ -15,14 +15,17 @@
 // -------- Renderer -----------------
 #include "Sisyphus/Renderer/Renderer.h"
 #include "Sisyphus/Renderer/Renderer2D.h"
+#include "Sisyphus/Renderer/Renderer3D.h"
 #include "Sisyphus/Renderer/RenderCommand.h"
 
 #include "Sisyphus/Renderer/Buffer.h"
 #include "Sisyphus/Renderer/Shader.h"
 #include "Sisyphus/Renderer/Texture.h"
 #include "Sisyphus/Renderer/VertexArray.h"
+#include "Sisyphus/Renderer/Mesh.h"
 
 #include "Sisyphus/Renderer/OrthographicCamera.h"
+#include "Sisyphus/Renderer/PerspectiveCamera.h"
 #include "Sisyphus/OrthographicCameraController.h"
 // -----------------------------------
 
