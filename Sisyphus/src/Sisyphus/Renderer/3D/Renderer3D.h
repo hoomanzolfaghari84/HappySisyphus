@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Sisyphus/Renderer/Mesh.h"
+#include "Sisyphus/Renderer/3D/Mesh.h"
 #include "Sisyphus/Renderer/Shader.h"
 #include "Sisyphus/Renderer/Camera.h"
-#include "Sisyphus/Renderer/PerspectiveCamera.h"
+#include "Sisyphus/Renderer/3D/PerspectiveCamera.h"
 
 namespace Sisyphus {
 

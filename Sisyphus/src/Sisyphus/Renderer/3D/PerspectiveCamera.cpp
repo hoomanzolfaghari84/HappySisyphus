@@ -11,7 +11,6 @@ namespace Sisyphus {
         : m_FOV(fovY), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip)
     {
         SetProjection(fovY, aspectRatio, nearClip, farClip);
-        RecalculateViewMatrix();
     }
 
     void PerspectiveCamera::SetProjection(float fovY, float aspectRatio, float nearClip, float farClip)
@@ -20,17 +19,14 @@ namespace Sisyphus {
         m_AspectRatio = aspectRatio;
         m_NearClip = nearClip;
         m_FarClip = farClip;
-        m_Projection = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
-        m_ViewProjectionMatrix = m_Projection * m_ViewMatrix;
+        UpdateProjectionMatrix();
     }
 
-    void PerspectiveCamera::RecalculateViewMatrix()
+    void PerspectiveCamera::UpdateProjectionMatrix()
     {
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position)
-            * glm::yawPitchRoll(glm::radians(m_Rotation.y), glm::radians(m_Rotation.x), glm::radians(m_Rotation.z));
-
-        m_ViewMatrix = glm::inverse(transform);
-        m_ViewProjectionMatrix = m_Projection * m_ViewMatrix;
+        m_Projection = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
     }
+
+
 
 }

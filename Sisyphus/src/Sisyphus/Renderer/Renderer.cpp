@@ -1,7 +1,7 @@
 #include "hspch.h"
 #include "Renderer.h"
 #include "Sisyphus/Renderer/Renderer2D.h"
-#include "Sisyphus/Renderer/Renderer3D.h"
+#include "Sisyphus/Renderer/3D/Renderer3D.h"
 
 namespace Sisyphus {
 

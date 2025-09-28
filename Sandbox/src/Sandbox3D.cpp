@@ -2,6 +2,8 @@
 
 #include <imgui/imgui.h>
 
+
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -11,59 +13,57 @@ Sandbox3D::Sandbox3D() : Layer("Sandbox2D")
 
 void Sandbox3D::OnAttach()
 {
-    m_Camera.SetPosition({ 0.0f, 0.0f, -10.0f }); // move back so we can see the cube
+	cubeVAO = Sisyphus::VertexArray::Create();
 
-    std::vector<Sisyphus::Vertex> cubeVertices = {
-        // positions            // normals           // texcoords
-        
-        // Back face (-Z)
-        {{-0.5f,-0.5f,-0.5f}, {0,0,-1}, {0,0}},
-        {{ 0.5f,-0.5f,-0.5f}, {0,0,-1}, {1,0}},
-        {{ 0.5f, 0.5f,-0.5f}, {0,0,-1}, {1,1}},
-        {{-0.5f, 0.5f,-0.5f}, {0,0,-1}, {0,1}},
+	// Cube vertices: positions + normals
+	float cubeVertices[] = {
+		// positions          // normals
+		-0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f, // 0
+		 0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f, // 1
+		 0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, // 2
+		-0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, // 3
 
-        // Front face (+Z)
-        {{-0.5f,-0.5f, 0.5f}, {0,0,1}, {0,0}},
-        {{ 0.5f,-0.5f, 0.5f}, {0,0,1}, {1,0}},
-        {{ 0.5f, 0.5f, 0.5f}, {0,0,1}, {1,1}},
-        {{-0.5f, 0.5f, 0.5f}, {0,0,1}, {0,1}},
+		-0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f, // 4
+		 0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f, // 5
+		 0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f, // 6
+		-0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f, // 7
+	};
 
-        // Left face (-X)
-        {{-0.5f,-0.5f,-0.5f}, {-1,0,0}, {0,0}},
-        {{-0.5f, 0.5f,-0.5f}, {-1,0,0}, {1,0}},
-        {{-0.5f, 0.5f, 0.5f}, {-1,0,0}, {1,1}},
-        {{-0.5f,-0.5f, 0.5f}, {-1,0,0}, {0,1}},
+	uint32_t cubeIndices[] = {
+		// back face
+		0, 1, 2, 2, 3, 0,
+		// front face
+		4, 5, 6, 6, 7, 4,
+		// left face
+		0, 3, 7, 7, 4, 0,
+		// right face
+		1, 5, 6, 6, 2, 1,
+		// bottom face
+		0, 1, 5, 5, 4, 0,
+		// top face
+		3, 2, 6, 6, 7, 3
+	};
 
-        // Right face (+X)
-        {{ 0.5f,-0.5f,-0.5f}, {1,0,0}, {0,0}},
-        {{ 0.5f, 0.5f,-0.5f}, {1,0,0}, {1,0}},
-        {{ 0.5f, 0.5f, 0.5f}, {1,0,0}, {1,1}},
-        {{ 0.5f,-0.5f, 0.5f}, {1,0,0}, {0,1}},
+	cubeVBO = Sisyphus::VertexBuffer::Create(cubeVertices, sizeof(cubeVertices));
+	cubeVBO->SetLayout({
+		{ Sisyphus::ShaderDataType::Float3, "aPos" },
+		{ Sisyphus::ShaderDataType::Float3, "aNormal" }
+		});
 
-        // Bottom face (-Y)
-        {{-0.5f,-0.5f,-0.5f}, {0,-1,0}, {0,0}},
-        {{ 0.5f,-0.5f,-0.5f}, {0,-1,0}, {1,0}},
-        {{ 0.5f,-0.5f, 0.5f}, {0,-1,0}, {1,1}},
-        {{-0.5f,-0.5f, 0.5f}, {0,-1,0}, {0,1}},
+	cubeVAO->AddVertexBuffer(cubeVBO);
 
-        // Top face (+Y)
-        {{-0.5f, 0.5f,-0.5f}, {0,1,0}, {0,0}},
-        {{ 0.5f, 0.5f,-0.5f}, {0,1,0}, {1,0}},
-        {{ 0.5f, 0.5f, 0.5f}, {0,1,0}, {1,1}},
-        {{-0.5f, 0.5f, 0.5f}, {0,1,0}, {0,1}}
-    };
+	auto cubeIBO = Sisyphus::IndexBuffer::Create(cubeIndices, sizeof(cubeIndices) / sizeof(uint32_t));
+	cubeVAO->SetIndexBuffer(cubeIBO);
 
-    std::vector<uint32_t> cubeIndices = {
-        0,1,2, 2,3,0,       // back
-        4,5,6, 6,7,4,       // front
-        8,9,10, 10,11,8,    // left
-        12,13,14, 14,15,12, // right
-        16,17,18, 18,19,16, // bottom
-        20,21,22, 22,23,20  // top
-    };
+	cubeShader = Sisyphus::Shader::Create("assets/shaders/Basic3D.glsl");
+	/*m_Camera = Sisyphus::FlyCamera(
+			glm::radians(45.0f),
+			(float)Sisyphus::Application::Get().GetWindow().GetWidth() / (float)Sisyphus::Application::Get().GetWindow().GetHeight(),
+			0.1f,
+			100.0f);*/
 
-    m_CubeMesh = CreateRef<Sisyphus::Mesh>(cubeVertices, cubeIndices);
-
+	//m_Camera.SetPosition(glm::vec3{ 2.0f, 2.0f, 2.0f });
+	
 }
 
 void Sandbox3D::OnDetach()
@@ -72,6 +72,36 @@ void Sandbox3D::OnDetach()
 
 void Sandbox3D::OnUpdate(Sisyphus::Timestep ts)
 {
+	// Input
+
+	// --- Keyboard Input ---
+	glm::vec3 direction(0.0f);
+	if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::W))
+		direction += m_Camera.GetFront();
+	if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::S))
+		direction -= m_Camera.GetFront();
+	if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::A))
+		direction -= glm::normalize(glm::cross(m_Camera.GetFront(), glm::vec3(0.0f, 1.0f, 0.0f)));
+	if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::D))
+		direction += glm::normalize(glm::cross(m_Camera.GetFront(), glm::vec3(0.0f, 1.0f, 0.0f)));
+	if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::Space))
+		direction += glm::vec3(0.0f, 1.0f, 0.0f);
+	if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::LeftControl))
+		direction -= glm::vec3(0.0f, 1.0f, 0.0f);
+
+	if (glm::length(direction) > 0.0f)
+		m_Camera.ProcessMovement(glm::normalize(direction), ts);
+
+	// --- Mouse Input ---
+	static glm::vec2 lastMousePos = Sisyphus::Input::GetMousePosition();
+	glm::vec2 mousePos = Sisyphus::Input::GetMousePosition();
+	glm::vec2 delta = mousePos - lastMousePos;
+	lastMousePos = mousePos;
+
+	float sensitivity = 0.1f;
+	m_Camera.ProcessRotation(delta.x * sensitivity, -delta.y * sensitivity);
+
+
 	// Update
 
 	
@@ -80,30 +110,56 @@ void Sandbox3D::OnUpdate(Sisyphus::Timestep ts)
 	Sisyphus::RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
 	Sisyphus::RenderCommand::Clear();
 
+	// Camera/View/Projection
 
-    /*Sisyphus::Renderer3D::BeginScene(m_Camera);
-    glm::mat4 cubeTransform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f });
-    Sisyphus::Renderer3D::DrawMesh(m_CubeMesh, cubeTransform);
-    Sisyphus::Renderer3D::EndScene();*/
+	glm::mat4 projection = m_Camera.GetProjection();
+	/*glm::mat4 projection = glm::perspective(glm::radians(45.0f),
+		(float)Sisyphus::Application::Get().GetWindow().GetWidth() / (float)Sisyphus::Application::Get().GetWindow().GetHeight(),
+		0.1f, 100.0f);*/
+	glm::mat4 view = m_Camera.GetViewMatrix();
+	//glm::mat4 view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), // Camera position
+	//	glm::vec3(0.0f, 0.0f, 0.0f), // Look at origin
+	//	glm::vec3(0.0f, 1.0f, 0.0f)); // Up vector
 
+	glm::mat4 model = glm::mat4(1.0f); // Cube at origin
 
-    /*float m_AspectRatio = 1280.f / 720.f;
-    Sisyphus::Renderer2D::BeginScene(Sisyphus::OrthographicCamera(-m_AspectRatio * 1.f, m_AspectRatio * 1.f, -1.f, 1.f));
+	cubeShader->Bind();
+	cubeShader->SetMat4("u_Model", model);
+	cubeShader->SetMat4("u_View", view);
+	cubeShader->SetMat4("u_Projection", projection);
 
-    Sisyphus::Renderer2D::DrawQuad({ -1.f, 0.f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-    Sisyphus::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+	// Light & color
+	cubeShader->SetFloat4("u_ObjectColor", m_CubeColor);
 
-
-    Sisyphus::Renderer2D::EndScene();*/
-
+	cubeVAO->Bind();
+	Sisyphus::RenderCommand::DrawIndexed(cubeVAO);
 }
 
 void Sandbox3D::OnImGuiRender()
 {
+	ImGui::Begin("Settings");
 
+	ImGui::ColorEdit4("Squares Color", glm::value_ptr(m_CubeColor));
+
+	ImGui::End();
 }
+
+
+//bool OnWindowResized(Sisyphus::WindowResizeEvent& e)
+//{
+//	m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
+//	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+//	return false;
+//}
 
 void Sandbox3D::OnEvent(Sisyphus::Event& e)
 {
+	Sisyphus::EventDispatcher dispatcher(e);
 
+	dispatcher.Dispatch<Sisyphus::MouseScrolledEvent>([this](Sisyphus::MouseScrolledEvent& e)
+	{
+		m_Camera.Zoom(e.GetYOffset() * 1.0f); // adjust zoom speed
+		return false;
+	});
+	//dispatcher.Dispatch<Sisyphus::WindowResizeEvent>(SP_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
 }

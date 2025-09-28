@@ -18,7 +18,12 @@ public:
 
 
 private:
-	Sisyphus::PerspectiveCamera m_Camera{ 45.0f, 1280.0f / 720.0f, 0.1f, 100.0f };
-	Sisyphus::Ref<Sisyphus::Mesh> m_CubeMesh;
+	Sisyphus::FlyCamera m_Camera{ 45.0f,
+		(float) Sisyphus::Application::Get().GetWindow().GetWidth()/ (float)Sisyphus::Application::Get().GetWindow().GetHeight(),
+		0.1f, 100.0f};
+	Sisyphus::Ref<Sisyphus::VertexBuffer> cubeVBO;
+	Sisyphus::Ref<Sisyphus::VertexArray> cubeVAO;
+	Sisyphus::Ref<Sisyphus::Shader> cubeShader;
+	glm::vec4 m_CubeColor{ 0.8f, 0.3f, 0.2f, 1.f };
 };
 

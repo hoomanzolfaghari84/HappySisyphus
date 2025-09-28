@@ -1,6 +1,8 @@
 #include "hspch.h"
 #include "Renderer3D.h"
 #include "Sisyphus/Renderer/RenderCommand.h"
+#include "Sisyphus/Renderer/3D/PerspectiveCamera.h"
+#include "Sisyphus/Renderer/3D/Mesh.h"
 
 namespace Sisyphus {
 
@@ -30,7 +32,7 @@ namespace Sisyphus {
 
     void Renderer3D::BeginScene(const PerspectiveCamera& camera)
     {
-        s_SceneData->ViewProjectionMatrix = camera.GetViewProjection();
+        //s_SceneData->ViewProjectionMatrix = camera.GetViewProjection();
         /*s_Shader->Bind();
         s_Shader->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);*/
     }
