@@ -4,31 +4,44 @@
 
 namespace Sisyphus {
 
-    Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+    Mesh::Mesh(float* vertices, uint32_t size, uint32_t* indices, uint32_t indexCount)
     {
         m_VertexArray = VertexArray::Create();
 
-        Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(
-            (vertices.size() * sizeof(Vertex))
+        m_VertexBuffer = VertexBuffer::Create(
+            vertices,
+            size
         );
-        vertexBuffer->SetLayout({
-            { ShaderDataType::Float3, "a_Position" },
-            { ShaderDataType::Float3, "a_Normal" },
-            { ShaderDataType::Float2, "a_TexCoord" }
+        SIPH_CORE_INFO("VertexBuffer created: {} bytes", size);
+        m_VertexBuffer->SetLayout({
+        { Sisyphus::ShaderDataType::Float3, "aPos" },
+        { Sisyphus::ShaderDataType::Float3, "aNormal" }
             });
 
-        vertexBuffer->SetData(
-            vertices.data(),
-            (vertices.size() * sizeof(Vertex)
-            ));
 
-        m_VertexArray->AddVertexBuffer(vertexBuffer);
+        const auto& layout = m_VertexBuffer->GetLayout();
+        SIPH_CORE_INFO("BufferLayout stride: {}", layout.GetStride());
+        for (auto& element : layout)
+        {
+            SIPH_CORE_INFO("Element: {} | Type: {} | Size: {} | Offset: {} | Components: {}",
+                element.Name,
+                (int)element.Type,
+                element.Size,
+                element.Offset,
+                element.GetComponentCount()
+            );
+        }
 
-        Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(
-            (uint32_t*)indices.data(),
-            (uint32_t)indices.size()
+        m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+
+        m_IndexBuffer = IndexBuffer::Create(
+            indices,
+            indexCount
         );
-        m_VertexArray->SetIndexBuffer(indexBuffer);
+        m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+
+
+        
     }
 
 }

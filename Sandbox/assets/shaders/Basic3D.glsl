@@ -32,9 +32,25 @@ in vec3 Normal;
 out vec4 FragColor;
 
 uniform vec4 u_ObjectColor;
+uniform vec3 u_LightColor;
+uniform vec3 u_LightPos;
 
 void main()
 {
-    FragColor = vec4(u_ObjectColor);
+    // Normalize the normal vector
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(u_LightPos - FragPos);  
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * u_LightColor;
+
+    float ambientStrength = 0.1;
+    vec3 ambient = ambientStrength * u_LightColor;
+
+    // Map from [-1, 1] to [0, 1] so we can see it as a color
+    // vec3 colorFromNormal = norm * 0.5 + 0.5;
+
+    // Multiply by object color to keep tinting if desired
+    vec3 result = (ambient + diffuse) * u_ObjectColor.rgb;
+    FragColor = vec4(result, u_ObjectColor.w);
 }
 

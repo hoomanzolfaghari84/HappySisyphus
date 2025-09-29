@@ -18,12 +18,16 @@ public:
 
 
 private:
+	glm::vec2 lastMousePos{ 0.f };
 	Sisyphus::FlyCamera m_Camera{ 45.0f,
 		(float) Sisyphus::Application::Get().GetWindow().GetWidth()/ (float)Sisyphus::Application::Get().GetWindow().GetHeight(),
 		0.1f, 100.0f};
-	Sisyphus::Ref<Sisyphus::VertexBuffer> cubeVBO;
-	Sisyphus::Ref<Sisyphus::VertexArray> cubeVAO;
-	Sisyphus::Ref<Sisyphus::Shader> cubeShader;
+
+
+	Sisyphus::Ref<Sisyphus::Mesh> m_CubeMesh;
 	glm::vec4 m_CubeColor{ 0.8f, 0.3f, 0.2f, 1.f };
+
+	Sisyphus::Ref<Sisyphus::Mesh> m_LightMesh;
+
 };
 

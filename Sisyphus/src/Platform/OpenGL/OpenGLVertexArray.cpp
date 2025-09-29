@@ -101,7 +101,22 @@ namespace Sisyphus {
 			case ShaderDataType::Mat3:
 			case ShaderDataType::Mat4:
 			{
-				uint8_t count = element.GetComponentCount();
+				uint8_t count = (element.Type == ShaderDataType::Mat3 ? 3 : 4); // columns
+				uint8_t vecSize = count; // each column is vec3 or vec4
+				for (uint8_t i = 0; i < count; i++)
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribPointer(m_VertexBufferIndex,
+						vecSize, // number of components in this column
+						ShaderDataTypeToOpenGLBaseType(element.Type),
+						element.Normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(),
+						(const void*)(element.Offset + sizeof(float) * vecSize * i));
+					glVertexAttribDivisor(m_VertexBufferIndex, 1);
+					m_VertexBufferIndex++;
+				}
+				break;
+				/*uint8_t count = element.GetComponentCount();
 				for (uint8_t i = 0; i < count; i++)
 				{
 					glEnableVertexAttribArray(m_VertexBufferIndex);
@@ -114,7 +129,7 @@ namespace Sisyphus {
 					glVertexAttribDivisor(m_VertexBufferIndex, 1);
 					m_VertexBufferIndex++;
 				}
-				break;
+				break;*/
 			}
 			default:
 				SP_CORE_ASSERT(false, "Unknown ShaderDataType!");

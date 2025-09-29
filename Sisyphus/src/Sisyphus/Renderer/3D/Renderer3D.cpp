@@ -7,14 +7,18 @@
 namespace Sisyphus {
 
     Renderer3D::SceneData* Renderer3D::s_SceneData = nullptr;
-    static Ref<Shader> s_Shader;
+    ShaderLibrary* Renderer3D::s_ShaderLibrary = nullptr;
+
+    
 
     void Renderer3D::Init()
     {
         s_SceneData = new SceneData();
+        s_ShaderLibrary = new ShaderLibrary();
 
         // Load a very simple shader
-        s_Shader = Shader::Create("assets/shaders/Basic3D.glsl");
+        s_ShaderLibrary->Load("assets/shaders/Basic3D.glsl");
+        s_ShaderLibrary->Load("assets/shaders/LightSrc.glsl");
     }
 
     void Renderer3D::Shutdown()
@@ -22,35 +26,47 @@ namespace Sisyphus {
         delete s_SceneData;
     }
 
-    void Renderer3D::BeginScene(const Camera& camera, const glm::mat4& cameraTransform)
+   
+    void Renderer3D::BeginScene(const FlyCamera& camera)
     {
-        s_SceneData->ViewProjectionMatrix =
-            camera.GetProjection() * glm::inverse(cameraTransform);
-        /*s_Shader->Bind();
-        s_Shader->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);*/
-    }
-
-    void Renderer3D::BeginScene(const PerspectiveCamera& camera)
-    {
-        //s_SceneData->ViewProjectionMatrix = camera.GetViewProjection();
-        /*s_Shader->Bind();
-        s_Shader->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);*/
+        s_SceneData->ViewMatrix = camera.GetViewMatrix();
+        s_SceneData->ProjectionMatrix = camera.GetProjection();
+        
     }
 
     void Renderer3D::EndScene()
     {
     }
 
-    void Renderer3D::DrawMesh(const Ref<Mesh>& mesh, const glm::mat4& transform)
+    void Renderer3D::DrawMesh(const Ref<Mesh>& mesh, const glm::mat4& transform,
+        const glm::vec4 color, const glm::vec3 lightPosition)
     {
-        s_Shader->Bind();
-        s_Shader->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
-        s_Shader->SetMat4("u_Transform", transform);
-        s_Shader->SetFloat3("u_LightDir", glm::normalize(glm::vec3(-0.5f, -1.0f, -0.3f)));
-        s_Shader->SetFloat3("u_Color", glm::vec3(0.8f, 0.2f, 0.3f));
 
-        mesh->GetVertexArray()->Bind();
+        auto shader = s_ShaderLibrary->Get("Basic3D");
+        shader->Bind();
+        shader->SetMat4("u_Model", transform);
+        shader->SetMat4("u_View", s_SceneData->ViewMatrix);
+        shader->SetMat4("u_Projection", s_SceneData->ProjectionMatrix);
+        shader->SetFloat4("u_ObjectColor", color);
+        shader->SetFloat3("u_LightColor", glm::vec3(1.f,1.f,1.f));
+        shader->SetFloat3("u_LightPos", lightPosition);
+
+
         RenderCommand::DrawIndexed(mesh->GetVertexArray());
     }
 
+    void Renderer3D::DrawLight(const Ref<Mesh>& mesh, const glm::mat4& transform) {
+        auto shader = s_ShaderLibrary->Get("LightSrc");
+
+        shader->Bind();
+        shader->SetMat4("u_Model", transform);
+        shader->SetMat4("u_View", s_SceneData->ViewMatrix);
+        shader->SetMat4("u_Projection", s_SceneData->ProjectionMatrix);
+
+        RenderCommand::DrawIndexed(mesh->GetVertexArray());
+
+       
+        
+
+    }
 }
