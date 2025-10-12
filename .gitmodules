@@ -7,3 +7,6 @@
 [submodule "Sisyphus/vendor/glfw-forked"]
 	path = Sisyphus/vendor/glfw-forked
 	url = git@github.com:hoomanzolfaghari84/glfw.git
+[submodule "Sisyphus/vendor/imgui-forked"]
+	path = Sisyphus/vendor/imgui-forked
+	url = git@github.com:hoomanzolfaghari84/imgui.git
