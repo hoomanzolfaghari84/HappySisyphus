@@ -10,9 +10,9 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "Dependencies.lua"
 
-include "Sisyphus/vendor/GLFW"
+include "Sisyphus/vendor/glfw-forked"
 include "Sisyphus/vendor/Glad"
-include "Sisyphus/vendor/imgui"
+include "Sisyphus/vendor/imgui-forked"
 
 
 -- 
