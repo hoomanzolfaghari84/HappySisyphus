@@ -8,6 +8,7 @@ namespace Sisyphus {
 
     Renderer3D::SceneData* Renderer3D::s_SceneData = nullptr;
     ShaderLibrary* Renderer3D::s_ShaderLibrary = nullptr;
+    TextureLibrary* Renderer3D::s_TextureLibrary = nullptr;
 
     
 
@@ -15,10 +16,19 @@ namespace Sisyphus {
     {
         s_SceneData = new SceneData();
         s_ShaderLibrary = new ShaderLibrary();
+        s_TextureLibrary = new TextureLibrary();
 
         // Load a very simple shader
         s_ShaderLibrary->Load("assets/shaders/Basic3D.glsl");
         s_ShaderLibrary->Load("assets/shaders/LightSrc.glsl");
+
+        s_SceneData->WhiteTexture = Texture2D::Create(TextureSpecification());
+        uint32_t whiteTextureData = 0xffffffff;
+        s_SceneData->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+
+        s_SceneData->TextureSlots[0] = s_SceneData->WhiteTexture;
+
+
     }
 
     void Renderer3D::Shutdown()
@@ -31,6 +41,7 @@ namespace Sisyphus {
     {
         s_SceneData->ViewMatrix = camera.GetViewMatrix();
         s_SceneData->ProjectionMatrix = camera.GetProjection();
+        s_SceneData->CameraPosition = camera.GetPosition();
         
     }
 
@@ -38,21 +49,32 @@ namespace Sisyphus {
     {
     }
 
-    void Renderer3D::DrawMesh(const Ref<Mesh>& mesh, const glm::mat4& transform,
-        const glm::vec4 color, const glm::vec3 lightPosition)
+    
+
+    void Renderer3D::DrawMesh(const Ref<Mesh>& mesh, const glm::mat4& transform, const glm::vec3 lightPosition)
     {
 
         auto shader = s_ShaderLibrary->Get("Basic3D");
         shader->Bind();
+
+
         shader->SetMat4("u_Model", transform);
         shader->SetMat4("u_View", s_SceneData->ViewMatrix);
         shader->SetMat4("u_Projection", s_SceneData->ProjectionMatrix);
-        shader->SetFloat4("u_ObjectColor", color);
-        shader->SetFloat3("u_LightColor", glm::vec3(1.f,1.f,1.f));
-        shader->SetFloat3("u_LightPos", lightPosition);
 
+
+        shader->SetFloat3("u_ViewPos", s_SceneData->CameraPosition);
+
+        mesh->GetMaterial()->Bind(shader);
+
+        shader->SetFloat3("u_Light.position", lightPosition);
+        shader->SetFloat3("u_Light.ambient", { 0.2f, 0.2f, 0.2f });
+        shader->SetFloat3("u_Light.diffuse", { 0.5f, 0.5f, 0.5f });
+        shader->SetFloat3("u_Light.specular",{ 1.0f, 1.0f, 1.0f });
 
         RenderCommand::DrawIndexed(mesh->GetVertexArray());
+
+        shader->Unbind();
     }
 
     void Renderer3D::DrawLight(const Ref<Mesh>& mesh, const glm::mat4& transform) {
@@ -65,8 +87,7 @@ namespace Sisyphus {
 
         RenderCommand::DrawIndexed(mesh->GetVertexArray());
 
-       
+        shader->Unbind();
         
-
     }
 }

@@ -23,6 +23,7 @@
 #include "Sisyphus/Renderer/Texture.h"
 #include "Sisyphus/Renderer/VertexArray.h"
 #include "Sisyphus/Renderer/3D/Mesh.h"
+#include "Sisyphus/Renderer/3D/Model.h"
 
 #include "Sisyphus/Renderer/OrthographicCamera.h"
 #include "Sisyphus/Renderer/3D/PerspectiveCamera.h"

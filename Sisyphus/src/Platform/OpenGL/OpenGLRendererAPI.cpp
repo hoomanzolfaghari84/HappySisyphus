@@ -42,7 +42,6 @@ namespace Sisyphus {
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_LINE_SMOOTH);
-		//glDisable(GL_CULL_FACE);
 
 	}
 

@@ -53,7 +53,7 @@ namespace Sisyphus {
             m_Position = position;
             UpdateCameraVectors();
         }
-        glm::vec3 GetPosition() { return m_Position; }
+        const glm::vec3 GetPosition() const { return m_Position; }
         glm::vec3 GetFront() { return m_Front; }
       
 

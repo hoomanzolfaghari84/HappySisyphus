@@ -1,5 +1,6 @@
 #include "hspch.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
+#include "Sisyphus/Utils/PlatformUtils.h"
 
 #include <stb_image.h>
 
@@ -7,7 +8,7 @@ namespace Sisyphus {
 
 	namespace Utils {
 
-		static GLenum HazelImageFormatToGLDataFormat(ImageFormat format)
+		static GLenum SisyphusImageFormatToGLDataFormat(ImageFormat format)
 		{
 			switch (format)
 			{
@@ -19,7 +20,7 @@ namespace Sisyphus {
 			return 0;
 		}
 
-		static GLenum HazelImageFormatToGLInternalFormat(ImageFormat format)
+		static GLenum SisyphusImageFormatToGLInternalFormat(ImageFormat format)
 		{
 			switch (format)
 			{
@@ -38,8 +39,8 @@ namespace Sisyphus {
 	{
 		HS_PROFILE_FUNCTION();
 
-		m_InternalFormat = Utils::HazelImageFormatToGLInternalFormat(m_Specification.Format);
-		m_DataFormat = Utils::HazelImageFormatToGLDataFormat(m_Specification.Format);
+		m_InternalFormat = Utils::SisyphusImageFormatToGLInternalFormat(m_Specification.Format);
+		m_DataFormat = Utils::SisyphusImageFormatToGLDataFormat(m_Specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
@@ -49,6 +50,8 @@ namespace Sisyphus {
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		m_Name = specification.Name;
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
@@ -101,6 +104,10 @@ namespace Sisyphus {
 
 			stbi_image_free(data);
 		}
+		else
+			SIPH_CORE_WARN("Texture data not loaded");
+
+		m_Name = FileUtils::ExtractNameFromPath(path);
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()

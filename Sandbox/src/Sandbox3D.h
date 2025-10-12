@@ -26,8 +26,11 @@ private:
 
 	Sisyphus::Ref<Sisyphus::Mesh> m_CubeMesh;
 	glm::vec4 m_CubeColor{ 0.8f, 0.3f, 0.2f, 1.f };
+	glm::vec3 m_CubePosition{ 0.0f, 0.0f, 0.0f};
 
 	Sisyphus::Ref<Sisyphus::Mesh> m_LightMesh;
+
+	Sisyphus::Ref<Sisyphus::Model> m_Model;
 
 };
 

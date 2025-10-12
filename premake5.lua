@@ -49,7 +49,13 @@ project "Sisyphus"
     "%{IncludeDir.ImGui}",
     "%{IncludeDir.glm}",
     "%{IncludeDir.VulkanSDK}",
-    "%{IncludeDir.stb_image}"
+    "%{IncludeDir.stb_image}",
+    "%{IncludeDir.assimp}",
+    "%{IncludeDir.assimp_build}",
+    }
+
+     libdirs {
+    "%{LibraryDir.assimp_build}"
     }
 
     links {"GLFW", "Glad", "ImGui", "opengl32.lib"}
@@ -79,7 +85,9 @@ project "Sisyphus"
 		{
 			"%{Library.ShaderC_Debug}",
 			"%{Library.SPIRV_Cross_Debug}",
-			"%{Library.SPIRV_Cross_GLSL_Debug}"
+			"%{Library.SPIRV_Cross_GLSL_Debug}",
+            "%{Library.assimp_build_Debug}"
+
 		}
 
     filter "configurations:Release"
@@ -91,7 +99,8 @@ project "Sisyphus"
 		{
 			"%{Library.ShaderC_Release}",
 			"%{Library.SPIRV_Cross_Release}",
-			"%{Library.SPIRV_Cross_GLSL_Release}"
+			"%{Library.SPIRV_Cross_GLSL_Release}",
+            "%{Library.assimp_build_Release}"
 		}
 
     filter "configurations:Dist"
@@ -103,7 +112,8 @@ project "Sisyphus"
 		{
 			"%{Library.ShaderC_Release}",
 			"%{Library.SPIRV_Cross_Release}",
-			"%{Library.SPIRV_Cross_GLSL_Release}"
+			"%{Library.SPIRV_Cross_GLSL_Release}",
+            "%{Library.assimp_build_Release}"
 		}
 
 
@@ -129,7 +139,9 @@ project "Sandbox"
         "Sisyphus/vendor/spdlog/include",
         "Sisyphus/src",
         "Sisyphus/vendor",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.assimp}",
+        "%{IncludeDir.assimp_build}",
     }
 
     links {

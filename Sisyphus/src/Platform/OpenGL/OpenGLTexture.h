@@ -31,6 +31,9 @@ namespace Sisyphus {
 		{
 			return m_RendererID == other.GetRendererID();
 		}
+
+		virtual const std::string& GetName() const override { return m_Name; }
+
 	private:
 		TextureSpecification m_Specification;
 
@@ -39,6 +42,7 @@ namespace Sisyphus {
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;
 		GLenum m_InternalFormat, m_DataFormat;
+		std::string m_Name;
 	};
 
 }

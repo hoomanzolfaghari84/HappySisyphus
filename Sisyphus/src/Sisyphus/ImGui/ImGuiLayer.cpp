@@ -85,10 +85,7 @@ namespace Sisyphus {
 
 	void ImGuiLayer::Begin()
 	{
-		HS_PROFILE_FUNCTION();
-
-		//glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Dark grey
-		
+		HS_PROFILE_FUNCTION();		
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -100,8 +97,9 @@ namespace Sisyphus {
 	void ImGuiLayer::End()
 	{
 		HS_PROFILE_FUNCTION();
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+
+		/*static bool show = true;
+		ImGui::ShowDemoWindow(&show);*/
 
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
@@ -156,6 +154,19 @@ namespace Sisyphus {
 	uint32_t ImGuiLayer::GetActiveWidgetID() const
 	{
 		return GImGui->ActiveId;
+	}
+
+	
+	void ImGuiLayer::HelpMarker(const char* desc)
+	{
+		ImGui::TextDisabled("(?)");
+		if (ImGui::BeginItemTooltip())
+		{
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted(desc);
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
 	}
 
 }
