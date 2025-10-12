@@ -1,10 +1,6 @@
 [submodule "Sisyphus/vendor/spdlog"]
 	path = Sisyphus/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "Sisyphus/vendor/imgui"]
-	path = Sisyphus/vendor/imgui
-	url = https://github.com/ocornut/imgui.git
-	branch = docking
 [submodule "Sisyphus/vendor/glm"]
 	path = Sisyphus/vendor/glm
 	url = https://github.com/g-truc/glm.git
