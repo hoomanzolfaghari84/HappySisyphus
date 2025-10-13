@@ -74,8 +74,6 @@ namespace Sisyphus {
 		material->SetTexture(Sisyphus::TextureType::Specular, specularTex);
 		material->SetShininess(64.0f);
 
-		//loaded_mesh->SetMaterial(material);
-
 		m_CubeMesh = Sisyphus::CreateRef<Sisyphus::Mesh>(
 			cubeVertices,
 			sizeof(cubeVertices),
@@ -95,18 +93,11 @@ namespace Sisyphus {
 
 		m_CubeMesh->PrintInfo();
 
-		Sisyphus::FramebufferSpecification fbSpec;
-		fbSpec.Width = 1290;
+		FramebufferSpecification fbSpec;
+		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
-		fbSpec.Attachments = {
-		{
-			{ Sisyphus::FramebufferTextureFormat::RGBA8 },
-			{ Sisyphus::FramebufferTextureFormat::RED_INTEGER },
-			{ Sisyphus::FramebufferTextureFormat::Depth }
-		}
-		};
-
-		m_FrameBuffer = Sisyphus::Framebuffer::Create(fbSpec);
+		m_FrameBuffer = Framebuffer::Create(fbSpec);
 
 	}
 
@@ -146,16 +137,27 @@ namespace Sisyphus {
 		}
 
 
-		// Update
-
-
-		// Render
+		// Resize
+		if (FramebufferSpecification spec = m_FrameBuffer->GetSpecification();
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
-			m_FrameBuffer->Bind();
-			Sisyphus::RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
-			Sisyphus::RenderCommand::Clear();
+			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+				m_Camera.SetProjection(45.0f,
+					m_ViewportSize.x / m_ViewportSize.y,
+					0.1f, 100.0f);
+			//m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			//m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 
+		// Render
+		
+		m_FrameBuffer->Bind();
+		Sisyphus::RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
+		Sisyphus::RenderCommand::Clear();
+		
+		// Clear our entity ID attachment to -1
+		m_FrameBuffer->ClearAttachment(1, -1);
 
 		glm::mat4 model = glm::mat4(1.0f); // Cube at origin
 		model = glm::translate(model, m_CubePosition);
@@ -297,12 +299,27 @@ namespace Sisyphus {
 
 		ImGui::End();
 
-		ImGui::Begin("ViewPort");
+		// Viewport
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::Begin("Viewport");
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
-		uint32_t colorAttachmentID = m_FrameBuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)(intptr_t)colorAttachmentID, ImVec2(1280 * 3 / 4, 720 * 3 / 4), ImVec2({0, 1}), ImVec2({1, 0}));
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		m_ViewportHovered = ImGui::IsWindowHovered();
 
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportHovered);
+
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+		uint64_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
+		ImGui::PopStyleVar();
 
 		ImGui::End();
 

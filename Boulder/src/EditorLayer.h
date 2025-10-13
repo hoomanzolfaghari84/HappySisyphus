@@ -20,6 +20,11 @@ namespace Sisyphus {
 
 
 	private:
+
+		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+
+
 		glm::vec2 lastMousePos{ 0.f };
 		Sisyphus::FlyCamera m_Camera{ 45.0f,
 			(float)Sisyphus::Application::Get().GetWindow().GetWidth() / (float)Sisyphus::Application::Get().GetWindow().GetHeight(),
@@ -35,6 +40,10 @@ namespace Sisyphus {
 		Sisyphus::Ref<Sisyphus::Model> m_Model;
 
 		Sisyphus::Ref<Sisyphus::Framebuffer> m_FrameBuffer;
+
+		bool m_ViewportFocused = false, m_ViewportHovered = false;
+		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+		glm::vec2 m_ViewportBounds[2];
 
 	};
 
