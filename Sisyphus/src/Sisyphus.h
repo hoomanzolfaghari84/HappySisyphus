@@ -19,6 +19,7 @@
 #include "Sisyphus/Renderer/RenderCommand.h"
 
 #include "Sisyphus/Renderer/Buffer.h"
+#include "Sisyphus/Renderer/Framebuffer.h"
 #include "Sisyphus/Renderer/Shader.h"
 #include "Sisyphus/Renderer/Texture.h"
 #include "Sisyphus/Renderer/VertexArray.h"

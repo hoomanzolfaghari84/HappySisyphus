@@ -32,5 +32,7 @@ private:
 
 	Sisyphus::Ref<Sisyphus::Model> m_Model;
 
+	Sisyphus::Ref<Sisyphus::Framebuffer> m_FrameBuffer;
+
 };
 
