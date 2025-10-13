@@ -174,15 +174,6 @@ void Sandbox3D::OnUpdate(Sisyphus::Timestep ts)
 
 void Sandbox3D::OnImGuiRender()
 {
-
-	ImGui::Begin("Settings");
-
-	ImGui::ColorEdit4("Cube Base Color", glm::value_ptr(m_CubeColor));
-	ImGui::SliderFloat3("Cube Location", glm::value_ptr(m_CubePosition), -5.0f, 5.0f);
-
-	ImGui::End();
-
-	return;
 	// READ THIS !!!
 		// TL;DR; this demo is more complicated than what most users you would normally use.
 		// If we remove all options we are showcasing, this demo would become:
