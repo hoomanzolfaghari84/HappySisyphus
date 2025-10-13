@@ -21,7 +21,7 @@ namespace Sisyphus {
 		return nullptr;
 	}
 
-	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
+	Ref<VertexBuffer> VertexBuffer::Create(const void* vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{

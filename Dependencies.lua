@@ -16,6 +16,8 @@ IncludeDir["entt"] = "%{wks.location}/Sisyphus/vendor/entt/include"
 -- IncludeDir["mono"] = "%{wks.location}/Sisyphus/vendor/mono/include"
 IncludeDir["shaderc"] = "%{wks.location}/Sisyphus/vendor/shaderc/include"
 IncludeDir["SPIRV_Cross"] = "%{wks.location}/Sisyphus/vendor/SPIRV-Cross"
+IncludeDir["assimp_build"] = "%{wks.location}/Sisyphus/vendor/build_assimp/include"
+IncludeDir["assimp"] = "%{wks.location}/Sisyphus/vendor/assimp/include"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 -- IncludeDir["msdfgen"] = "%{wks.location}/Sisyphus/vendor/msdf-atlas-gen/msdfgen"
 -- IncludeDir["msdf_atlas_gen"] = "%{wks.location}/Sisyphus/vendor/msdf-atlas-gen/msdf-atlas-gen"
@@ -23,10 +25,14 @@ IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 LibraryDir = {}
 
 LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
+LibraryDir["assimp_build"] = "%{wks.location}/Sisyphus/vendor/build_assimp/lib"
 -- LibraryDir["mono"] = "%{wks.location}/Sisyphus/vendor/mono/lib/%{cfg.buildcfg}"
 
 Library = {}
 -- Library["mono"] = "%{LibraryDir.mono}/libmono-static-sgen.lib"
+
+Library["assimp_build_Debug"] = "%{LibraryDir.assimp_build}/Debug/assimp-vc143-mtd.lib"
+Library["assimp_build_Release"] = "%{LibraryDir.assimp_build}/Release/assimp-vc143-mt.lib"
 
 Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
 Library["VulkanUtils"] = "%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"

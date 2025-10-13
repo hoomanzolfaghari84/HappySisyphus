@@ -12,31 +12,7 @@ Sandbox2D::Sandbox2D() : Layer("Sandbox2D"), m_CameraController(1280.f / 720.f, 
 void Sandbox2D::OnAttach()
 {
 
-
-	//m_SquareVA = Sisyphus::VertexArray::Create();
-
-
-	/*float squareVertices[3 * 4] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
-	};
-
-	Sisyphus::Ref<Sisyphus::VertexBuffer> squareVB = Sisyphus::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
-	squareVB->SetLayout({
-			{ Sisyphus::ShaderDataType::Float3, "a_Position" },
-		});
-	m_SquareVA->AddVertexBuffer(squareVB);
-
-	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-	Sisyphus::Ref<Sisyphus::IndexBuffer> squareIB;
-	squareIB = Sisyphus::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
-	m_SquareVA->SetIndexBuffer(squareIB);
-
-	
-
-	m_FlatColorShader = Sisyphus::Shader::Create("assets/shaders/FlatColor.glsl");*/
+	m_FlatColorShader = Sisyphus::Shader::Create("assets/shaders/FlatColor.glsl");
 
 	m_Texture = Sisyphus::Texture2D::Create("assets/textures/Checkerboard.png");
 

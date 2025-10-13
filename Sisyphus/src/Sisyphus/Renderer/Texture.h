@@ -21,6 +21,7 @@ namespace Sisyphus {
 		uint32_t Height = 1;
 		ImageFormat Format = ImageFormat::RGBA8;
 		bool GenerateMips = true;
+		std::string Name = "";
 	};
 
 	class Texture
@@ -43,6 +44,8 @@ namespace Sisyphus {
 		virtual bool IsLoaded() const = 0;
 
 		virtual bool operator==(const Texture& other) const = 0;
+
+		virtual const std::string& GetName() const = 0;
 	};
 
 	class Texture2D : public Texture
@@ -50,6 +53,22 @@ namespace Sisyphus {
 	public:
 		static Ref<Texture2D> Create(const TextureSpecification& specification);
 		static Ref<Texture2D> Create(const std::string& path);
+	};
+
+	class TextureLibrary
+	{
+	public:
+		void Add(const std::string& name, const Ref<Texture>& texture);
+		void Add(const Ref<Texture>& texture);
+		Ref<Texture> Load(const std::string& filepath);
+		Ref<Texture> Load(const std::string& name, const std::string& filepath);
+
+		Ref<Texture> Get(const std::string& name);
+
+		bool Exists(const std::string& name) const;
+	private:
+		std::unordered_map<std::string, Ref<Texture>> m_Textures;
+
 	};
 
 }

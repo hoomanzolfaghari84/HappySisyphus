@@ -8,6 +8,7 @@
 
 #include "Sisyphus/Renderer/Shader.h"
 
+
 namespace Sisyphus {
 
 	Application* Application::s_Instance = nullptr;
@@ -57,6 +58,9 @@ namespace Sisyphus {
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
 	}
+	
+
+	
 
 	void Application::Run()
 	{
@@ -71,6 +75,7 @@ namespace Sisyphus {
 			m_LastFrameTime = time;
 
 			//ExecuteMainThreadQueue();
+		
 
 			if (!m_Minimized)
 			{
@@ -90,6 +95,7 @@ namespace Sisyphus {
 				}
 				m_ImGuiLayer->End();
 			}
+
 
 			m_Window->OnUpdate();
 		}

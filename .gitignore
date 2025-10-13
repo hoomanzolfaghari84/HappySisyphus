@@ -17,6 +17,10 @@ Intermediates/
 # Directories
 Sisyphus/vendor/assimp
 Sisyphus/vendor/build_assimp
+Sandbox/assets/models
 Sisyphus/vendor/VulkanSDK
 Boulder/assets/cache
 scripts/__pycache__
+/Sandbox/HazelProfile-Runtime.json
+/Sandbox/HazelProfile-Shutdown.json
+/Sandbox/HazelProfile-Startup.json

@@ -1,6 +1,7 @@
 #include "hspch.h"
 #include "OpenGLShader.h"
 #include "Sisyphus/Core/Timer.h"
+#include "Sisyphus/Utils/PlatformUtils.h"
 
 //#include <fstream>
 #include <glad/glad.h>
@@ -186,11 +187,8 @@ namespace Sisyphus {
 		//}
 
 		// Extract name from filepath
-		auto lastSlash = filepath.find_last_of("/\\");
-		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		auto lastDot = filepath.rfind('.');
-		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
-		m_Name = filepath.substr(lastSlash, count);
+		m_Name = FileUtils::ExtractNameFromPath(filepath);
+
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)

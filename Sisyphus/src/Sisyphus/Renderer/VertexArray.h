@@ -1,9 +1,6 @@
 #pragma once
-#pragma once
 
 #include "Sisyphus/Renderer/Buffer.h"
-
-#include <memory>
 
 namespace Sisyphus {
 
