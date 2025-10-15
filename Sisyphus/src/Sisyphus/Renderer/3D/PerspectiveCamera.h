@@ -11,7 +11,7 @@ namespace Sisyphus {
 
         void SetProjection(float fovY, float aspectRatio, float nearClip, float farClip);
 
-        const glm::mat4& GetProjection() const { return m_Projection; }
+        inline void SetViewportSize(float width, float height) { m_AspectRatio = width / height; }
 
         void Zoom(float yoffset) {
             m_FOV -= (float)yoffset;
@@ -35,14 +35,15 @@ namespace Sisyphus {
     class FlyCamera : public PerspectiveCamera
     {
     public:
-        FlyCamera(float fovY = 45.0f, float aspectRatio = 16.0f / 9.0f, float nearClip = 0.1f, float farClip = 100.0f)
+        FlyCamera(float fovY = 45.0f, float aspectRatio = 1280.0f / 720.0f, float nearClip = 0.1f, float farClip = 100.0f)
             : PerspectiveCamera(fovY, aspectRatio, nearClip, farClip),
-            m_Position(0.0f, 0.0f, 3.0f),
+            m_Position(3.0f, 3.0f, 3.0f),
             m_Front(0.0f, 0.0f, -1.0f),
             m_Yaw(-90.0f), m_Pitch(0.0f)
         {
 
             UpdateCameraVectors();
+            ProcessRotation(-45.f, -45.f);
         }
 
         ~FlyCamera() = default;
@@ -54,7 +55,7 @@ namespace Sisyphus {
             UpdateCameraVectors();
         }
         const glm::vec3 GetPosition() const { return m_Position; }
-        glm::vec3 GetFront() { return m_Front; }
+        glm::vec3 GetFront() const { return m_Front; }
       
 
         void ProcessRotation(float xoffset, float yoffset, bool constrainPitch = true) {

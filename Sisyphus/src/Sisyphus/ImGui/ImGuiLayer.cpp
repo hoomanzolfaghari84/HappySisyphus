@@ -32,7 +32,7 @@ namespace Sisyphus {
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;        // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
@@ -61,7 +61,7 @@ namespace Sisyphus {
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
+		ImGui_ImplOpenGL3_Init("#version 450");
 	}
 
 	void ImGuiLayer::OnDetach()
@@ -80,7 +80,12 @@ namespace Sisyphus {
 			ImGuiIO& io = ImGui::GetIO();
 			e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
 			e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+			if(e.GetEventType() == EventType::MouseButtonPressed)
+				SIPH_CORE_INFO("ImGui blocked event");
 		}
+
+		if (e.GetEventType() == EventType::MouseButtonPressed)
+			SIPH_CORE_INFO("ImGui did not blocked event");
 	}
 
 	void ImGuiLayer::Begin()

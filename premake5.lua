@@ -1,6 +1,6 @@
 workspace "HappySisyphus"
     architecture "x64"
-    startproject "Sandbox"
+    startproject "Boulder"
     
 
     configurations { "Debug", "Release", "Dist" }

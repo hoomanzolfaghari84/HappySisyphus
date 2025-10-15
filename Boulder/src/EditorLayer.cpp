@@ -16,88 +16,90 @@ namespace Sisyphus {
 
 	void EditorLayer::OnAttach()
 	{
-		// Cube vertices: positions + normals + texture coords
-		float cubeVertices[] = {
-			// Back face (-Z)
-			-0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
-			 0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
-			-0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 1.0f,
+		{
+			// Cube vertices: positions + normals + texture coords
+			float cubeVertices[] = {
+				// Back face (-Z)
+				-0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+				 0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
+				 0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
+				-0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 1.0f,
 
-			// Front face (+Z)
-			-0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
-			 0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
-			-0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 1.0f,
+				// Front face (+Z)
+				-0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
+				 0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 0.0f,
+				 0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
+				-0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 1.0f,
 
-			// Left face (-X)
-			-0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+				// Left face (-X)
+				-0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+				-0.5f,  0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+				-0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+				-0.5f, -0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
 
-			// Right face (+X)
-			 0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
-			 0.5f, -0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+				// Right face (+X)
+				 0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+				 0.5f,  0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+				 0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+				 0.5f, -0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
 
-			 // Bottom face (-Y)
-			 -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
-			  0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 1.0f,
-			  0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
-			 -0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 0.0f,
+				 // Bottom face (-Y)
+				 -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
+				  0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 1.0f,
+				  0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
+				 -0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 0.0f,
 
-			 // Top face (+Y)
-			 -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f,
-			  0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 1.0f,
-			  0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
-			 -0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f
-		};
-
-
-		// Indices for each face (two triangles per face)
-		uint32_t cubeIndices[] = {
-			 0,  1,  2,   2,  3,  0,   // back
-			 4,  5,  6,   6,  7,  4,   // front
-			 8,  9, 10,  10, 11,  8,   // left
-			12, 13, 14,  14, 15, 12,   // right
-			16, 17, 18,  18, 19, 16,   // bottom
-			20, 21, 22,  22, 23, 20    // top
-		};
-
-		auto diffuseTex = Sisyphus::Renderer3D::GetTextureLibrary()->Load("assets/textures/container2.png");
-		auto specularTex = Sisyphus::Renderer3D::GetTextureLibrary()->Load("assets/textures/container2_specular.png");
-
-		auto material = Sisyphus::CreateRef<Sisyphus::Material>();
-		material->SetTexture(Sisyphus::TextureType::Diffuse, diffuseTex);
-		material->SetTexture(Sisyphus::TextureType::Specular, specularTex);
-		material->SetShininess(64.0f);
-
-		m_CubeMesh = Sisyphus::CreateRef<Sisyphus::Mesh>(
-			cubeVertices,
-			sizeof(cubeVertices),
-			cubeIndices,
-			sizeof(cubeIndices) / sizeof(uint32_t)
-		);
-		m_CubeMesh->SetMaterial(material);
+				 // Top face (+Y)
+				 -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f,
+				  0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 1.0f,
+				  0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
+				 -0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f
+			};
 
 
-		m_LightMesh = Sisyphus::CreateRef<Sisyphus::Mesh>(
-			cubeVertices,
-			sizeof(cubeVertices),
-			cubeIndices,
-			sizeof(cubeIndices) / sizeof(uint32_t)
-		);
+			// Indices for each face (two triangles per face)
+			uint32_t cubeIndices[] = {
+				 0,  1,  2,   2,  3,  0,   // back
+				 4,  5,  6,   6,  7,  4,   // front
+				 8,  9, 10,  10, 11,  8,   // left
+				12, 13, 14,  14, 15, 12,   // right
+				16, 17, 18,  18, 19, 16,   // bottom
+				20, 21, 22,  22, 23, 20    // top
+			};
+
+			auto diffuseTex = Sisyphus::Renderer3D::GetTextureLibrary()->Load("assets/textures/container2.png");
+			auto specularTex = Sisyphus::Renderer3D::GetTextureLibrary()->Load("assets/textures/container2_specular.png");
+
+			auto material = Sisyphus::CreateRef<Sisyphus::Material>();
+			material->SetTexture(Sisyphus::TextureType::Diffuse, diffuseTex);
+			material->SetTexture(Sisyphus::TextureType::Specular, specularTex);
+			material->SetShininess(64.0f);
+
+			m_CubeMesh = Sisyphus::CreateRef<Sisyphus::Mesh>(
+				cubeVertices,
+				sizeof(cubeVertices),
+				cubeIndices,
+				sizeof(cubeIndices) / sizeof(uint32_t)
+			);
+			m_CubeMesh->SetMaterial(material);
 
 
-		m_CubeMesh->PrintInfo();
+			m_LightMesh = Sisyphus::CreateRef<Sisyphus::Mesh>(
+				cubeVertices,
+				sizeof(cubeVertices),
+				cubeIndices,
+				sizeof(cubeIndices) / sizeof(uint32_t)
+			);
+		}
 
-		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
-		fbSpec.Width = 1280;
-		fbSpec.Height = 720;
-		m_FrameBuffer = Framebuffer::Create(fbSpec);
+		{
+			FramebufferSpecification fbSpec;
+			fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+			fbSpec.Width = 1280;
+			fbSpec.Height = 720;
+			m_FrameBuffer = Framebuffer::Create(fbSpec);
+		}
+
 
 	}
 
@@ -108,7 +110,7 @@ namespace Sisyphus {
 	void EditorLayer::OnUpdate(Sisyphus::Timestep ts)
 	{
 		// Input
-		if (Sisyphus::Input::IsMouseButtonPressed(Sisyphus::Mouse::ButtonRight)) {
+		if (m_ViewportHovered && Sisyphus::Input::IsMouseButtonPressed(Sisyphus::Mouse::ButtonRight)) {
 			// --- Keyboard Input ---
 			glm::vec3 direction(0.0f);
 			if (Sisyphus::Input::IsKeyPressed(Sisyphus::Key::W))
@@ -167,10 +169,6 @@ namespace Sisyphus {
 
 		m_CubeMesh->GetMaterial()->SetFlatColor(m_CubeColor);
 		Sisyphus::Renderer3D::DrawMesh(m_CubeMesh, model, lightPosition);
-
-
-		/*for (auto mesh : m_Model->GetMeshes())
-			Sisyphus::Renderer3D::DrawMesh(mesh, model, lightPosition);*/
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, lightPosition);

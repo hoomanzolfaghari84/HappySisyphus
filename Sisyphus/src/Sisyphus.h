@@ -27,6 +27,7 @@
 #include "Sisyphus/Renderer/3D/Model.h"
 
 #include "Sisyphus/Renderer/OrthographicCamera.h"
+#include "Sisyphus/Renderer/EditorCamera.h"
 #include "Sisyphus/Renderer/3D/PerspectiveCamera.h"
 #include "Sisyphus/OrthographicCameraController.h"
 // -----------------------------------

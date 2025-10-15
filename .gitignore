@@ -15,6 +15,7 @@ Intermediates/
 **.csproj
 
 # Directories
+.idea
 Sisyphus/vendor/assimp
 Sisyphus/vendor/build_assimp
 Sandbox/assets/models

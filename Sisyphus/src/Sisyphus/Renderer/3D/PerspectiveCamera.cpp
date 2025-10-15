@@ -10,7 +10,7 @@ namespace Sisyphus {
     PerspectiveCamera::PerspectiveCamera(float fovY, float aspectRatio, float nearClip, float farClip)
         : m_FOV(fovY), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip)
     {
-        SetProjection(fovY, aspectRatio, nearClip, farClip);
+        UpdateProjectionMatrix();
     }
 
     void PerspectiveCamera::SetProjection(float fovY, float aspectRatio, float nearClip, float farClip)
