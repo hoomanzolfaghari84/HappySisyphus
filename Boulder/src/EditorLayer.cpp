@@ -290,10 +290,17 @@ namespace Sisyphus {
 		}
 
 
-		ImGui::Begin("Settings");
+		ImGui::Begin("Cube Settings");
 
 		ImGui::ColorEdit4("Cube Base Color", glm::value_ptr(m_CubeColor));
 		ImGui::SliderFloat3("Cube Location", glm::value_ptr(m_CubePosition), -5.0f, 5.0f);
+
+		ImGui::End();
+
+		ImGui::Begin("Viewport Navigation guide");
+
+		ImGui::Text("Hold Right-Click on Viewport to enable navigation");
+		ImGui::Text("Move with WASD, Ctrl, and Space keys in all 6 directions.");
 
 		ImGui::End();
 

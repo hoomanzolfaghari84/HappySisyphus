@@ -80,12 +80,9 @@ namespace Sisyphus {
 			ImGuiIO& io = ImGui::GetIO();
 			e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
 			e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
-			if(e.GetEventType() == EventType::MouseButtonPressed)
-				SIPH_CORE_INFO("ImGui blocked event");
+			
 		}
 
-		if (e.GetEventType() == EventType::MouseButtonPressed)
-			SIPH_CORE_INFO("ImGui did not blocked event");
 	}
 
 	void ImGuiLayer::Begin()
