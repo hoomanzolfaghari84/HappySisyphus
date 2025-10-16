@@ -102,6 +102,19 @@ void Sandbox3D::OnAttach()
 
 	m_CubeMesh->PrintInfo();
 
+	Sisyphus::FramebufferSpecification fbSpec;
+	fbSpec.Width = 1290;
+	fbSpec.Height = 720;
+	fbSpec.Attachments = {
+	{
+		{ Sisyphus::FramebufferTextureFormat::RGBA8 },
+		{ Sisyphus::FramebufferTextureFormat::RED_INTEGER },
+		{ Sisyphus::FramebufferTextureFormat::Depth }
+	}
+	};
+
+	m_FrameBuffer = Sisyphus::Framebuffer::Create(fbSpec);
+
 }
 
 void Sandbox3D::OnDetach()
@@ -144,9 +157,11 @@ void Sandbox3D::OnUpdate(Sisyphus::Timestep ts)
 
 	
 	// Render
-
-	Sisyphus::RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
-	Sisyphus::RenderCommand::Clear();
+	{
+		m_FrameBuffer->Bind();
+		Sisyphus::RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
+		Sisyphus::RenderCommand::Clear();
+	}
 
 
 	glm::mat4 model = glm::mat4(1.0f); // Cube at origin
@@ -168,21 +183,13 @@ void Sandbox3D::OnUpdate(Sisyphus::Timestep ts)
 	Sisyphus::Renderer3D::DrawLight(m_LightMesh, model);
 
 	Sisyphus::Renderer3D::EndScene();
+	m_FrameBuffer->Unbind();
 }
 
 
 
 void Sandbox3D::OnImGuiRender()
 {
-
-	ImGui::Begin("Settings");
-
-	ImGui::ColorEdit4("Cube Base Color", glm::value_ptr(m_CubeColor));
-	ImGui::SliderFloat3("Cube Location", glm::value_ptr(m_CubePosition), -5.0f, 5.0f);
-
-	ImGui::End();
-
-	return;
 	// READ THIS !!!
 		// TL;DR; this demo is more complicated than what most users you would normally use.
 		// If we remove all options we are showcasing, this demo would become:
@@ -294,6 +301,13 @@ void Sandbox3D::OnImGuiRender()
 
 	ImGui::ColorEdit4("Cube Base Color", glm::value_ptr(m_CubeColor));
 	ImGui::SliderFloat3("Cube Location", glm::value_ptr(m_CubePosition), -5.0f, 5.0f);
+
+	ImGui::End();
+
+	ImGui::Begin("ViewPort");
+
+	uint32_t colorAttachmentID = m_FrameBuffer->GetColorAttachmentRendererID();
+	ImGui::Image((void*)(intptr_t)colorAttachmentID, ImVec2(1280 * 3 /4, 720 * 3 / 4));
 
 	ImGui::End();
 

@@ -19,6 +19,7 @@
 #include "Sisyphus/Renderer/RenderCommand.h"
 
 #include "Sisyphus/Renderer/Buffer.h"
+#include "Sisyphus/Renderer/Framebuffer.h"
 #include "Sisyphus/Renderer/Shader.h"
 #include "Sisyphus/Renderer/Texture.h"
 #include "Sisyphus/Renderer/VertexArray.h"
@@ -26,6 +27,7 @@
 #include "Sisyphus/Renderer/3D/Model.h"
 
 #include "Sisyphus/Renderer/OrthographicCamera.h"
+#include "Sisyphus/Renderer/EditorCamera.h"
 #include "Sisyphus/Renderer/3D/PerspectiveCamera.h"
 #include "Sisyphus/OrthographicCameraController.h"
 // -----------------------------------

@@ -1,6 +1,6 @@
 workspace "HappySisyphus"
     architecture "x64"
-    startproject "Sandbox"
+    startproject "Boulder"
     
 
     configurations { "Debug", "Release", "Dist" }
@@ -171,5 +171,62 @@ project "Sandbox"
         optimize "on"
         runtime "Release"
 
+
+
+
+-- 
+-- Sandbox Application Project
+-- 
+project "Boulder"
+    location "Boulder"
+    kind "ConsoleApp"
+    language "C++"
+    cppdialect "C++20"
+    staticruntime "on"
     
+
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files { "%{prj.name}/src/**.h", "%{prj.name}/src/**.hpp", "%{prj.name}/src/**.cpp" }
+
+
+    includedirs {
+        "Sisyphus/vendor/spdlog/include",
+        "Sisyphus/src",
+        "Sisyphus/vendor",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.assimp}",
+        "%{IncludeDir.assimp_build}",
+    }
+
+    links {
+        "Sisyphus"  
+    }
+
+    filter "system:windows"
+        systemversion "latest"
+        defines {
+            "SP_PLATFORM_WINDOWS"
+            -- "_WINDLL"
+        }
+        buildoptions { "/utf-8" }
+
+    filter "configurations:Debug"
+        defines { "DEBUG", "SP_DEBUG" }
+        symbols "on"
+        runtime "Debug"
+
+    filter "configurations:Release"
+        defines { "NDEBUG", "SP_RELEASE" }
+        optimize "on"
+        runtime "Release"
+
+    filter "configurations:Dist"
+        defines { "NDEBUG", "SP_DIST" }
+        optimize "on"
+        runtime "Release"
+
     
+
