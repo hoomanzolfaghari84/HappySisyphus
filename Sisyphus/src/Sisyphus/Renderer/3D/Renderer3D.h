@@ -15,7 +15,7 @@ namespace Sisyphus {
         static void BeginScene(const FlyCamera& camera);
         static void EndScene();
 
-        static void DrawMesh(const Ref<Mesh>& mesh, const glm::mat4& transform, const glm::vec3 lightPosition); 
+        static void DrawMesh(const Ref<Mesh>& mesh, const glm::mat4& transform, const glm::vec3 lightPosition);
         static void DrawLight(const Ref<Mesh>& mesh, const glm::mat4& transform);
         static TextureLibrary* GetTextureLibrary() {
             return s_TextureLibrary;
