@@ -52,6 +52,7 @@ project "Sisyphus"
     "%{IncludeDir.stb_image}",
     "%{IncludeDir.assimp}",
     "%{IncludeDir.assimp_build}",
+    "%{IncludeDir.entt}",
     }
 
      libdirs {
@@ -142,6 +143,7 @@ project "Sandbox"
         "%{IncludeDir.glm}",
         "%{IncludeDir.assimp}",
         "%{IncludeDir.assimp_build}",
+        "%{IncludeDir.entt}",
     }
 
     links {
@@ -172,8 +174,6 @@ project "Sandbox"
         runtime "Release"
 
 
-
-
 -- 
 -- Sandbox Application Project
 -- 
@@ -199,6 +199,7 @@ project "Boulder"
         "%{IncludeDir.glm}",
         "%{IncludeDir.assimp}",
         "%{IncludeDir.assimp_build}",
+        "%{IncludeDir.entt}",
     }
 
     links {
